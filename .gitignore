@@ -54,3 +54,10 @@ coverage/
 
 # Misc
 .history/
+
+.vercel
+
+# Database
+*.db
+*.db-shm
+*.db-wal

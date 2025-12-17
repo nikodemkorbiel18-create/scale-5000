@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | ScaleAI Systems</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <nav class="fixed w-full z-50 top-0 left-0 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="font-bold text-xl tracking-tighter flex items-center gap-2">
+                <div class="w-3 h-3 bg-black rounded-full"></div>
+                ScaleAI
+            </a>
+        </div>
+    </nav>
+
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-md mx-auto">
+            <div class="text-center mb-10">
+                <h1 class="text-4xl font-bold tracking-tight mb-3">Welcome Back</h1>
+                <p class="text-gray-600">Sign in to access your dashboard</p>
+            </div>
+
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8">
+                <form id="loginForm" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                        <input
+                            type="password"
+                            id="password"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                    </div>
+
+                    <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                        <span id="errorText">Invalid credentials</span>
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="submitButton"
+                        class="w-full bg-slate-900 text-white px-6 py-4 rounded-full font-bold text-lg hover:bg-slate-800"
+                    >
+                        Sign In
+                    </button>
+
+                    <p class="text-sm text-gray-600 text-center">
+                        Don't have an account? <a href="signup.html" class="text-slate-900 font-medium hover:underline">Sign up</a>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const submitButton = document.getElementById('submitButton');
+
+            errorDiv.classList.add('hidden');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Signing in...';
+
+            try {
+                const response = await fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    window.location.href = '/dashboard.html';
+                } else {
+                    errorText.textContent = data.error || 'Login failed';
+                    errorDiv.classList.remove('hidden');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Sign In';
+                }
+            } catch (error) {
+                errorText.textContent = 'Network error. Please try again.';
+                errorDiv.classList.remove('hidden');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Sign In';
+            }
+        });
+    </script>
+</body>
+</html>

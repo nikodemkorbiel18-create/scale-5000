@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | ScaleAI Systems</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+        }
+    </style>
+</head>
+<body>
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div class="font-bold text-xl tracking-tighter flex items-center gap-2">
+                <div class="w-3 h-3 bg-black rounded-full"></div>
+                ScaleAI
+            </div>
+            <div class="flex items-center gap-4">
+                <span id="userEmail" class="text-sm text-gray-600"></span>
+                <button onclick="logout()" class="text-sm text-gray-600 hover:text-black">Logout</button>
+            </div>
+        </div>
+    </nav>
+
+    <main class="max-w-7xl mx-auto px-6 py-12">
+        <div class="mb-8">
+            <h1 class="text-3xl font-bold mb-2">AI Business Audit</h1>
+            <p class="text-gray-600">Get instant AI-powered recommendations to automate your education business</p>
+        </div>
+
+        <!-- Audit Form -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
+            <form id="auditForm" class="space-y-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Describe your education business</label>
+                    <textarea
+                        id="businessDescription"
+                        required
+                        rows="4"
+                        placeholder="e.g., I run an online coding bootcamp with 150 students. I spend 3 hours daily answering repetitive questions and manually onboarding new students..."
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                    ></textarea>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Current Monthly Revenue (optional)</label>
+                    <select
+                        id="currentRevenue"
+                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                    >
+                        <option value="">Select range...</option>
+                        <option value="$0-5k">$0 - $5k</option>
+                        <option value="$5k-10k">$5k - $10k</option>
+                        <option value="$10k-25k">$10k - $25k</option>
+                        <option value="$25k-50k">$25k - $50k</option>
+                        <option value="$50k+">$50k+</option>
+                    </select>
+                </div>
+
+                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                    <span id="errorText">Failed to generate audit</span>
+                </div>
+
+                <button
+                    type="submit"
+                    id="submitButton"
+                    class="bg-slate-900 text-white px-8 py-3 rounded-full font-bold hover:bg-slate-800"
+                >
+                    Generate AI Audit
+                </button>
+            </form>
+        </div>
+
+        <!-- Audit Result -->
+        <div id="auditResult" class="hidden bg-white rounded-2xl shadow-sm border border-gray-200 p-8 mb-8">
+            <div class="flex items-start justify-between mb-4">
+                <h2 class="text-xl font-bold">Your AI Business Audit</h2>
+                <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">New</span>
+            </div>
+            <div id="auditContent" class="prose max-w-none text-gray-700 whitespace-pre-wrap"></div>
+        </div>
+
+        <!-- Audit History -->
+        <div class="bg-white rounded-2xl shadow-sm border border-gray-200 p-8">
+            <h2 class="text-xl font-bold mb-4">Previous Audits</h2>
+            <div id="auditHistory" class="space-y-4">
+                <p class="text-gray-500 text-sm">No previous audits</p>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Check authentication
+        fetch('/api/me')
+            .then(res => {
+                if (!res.ok) {
+                    window.location.href = '/login.html';
+                    return;
+                }
+                return res.json();
+            })
+            .then(user => {
+                if (user) {
+                    document.getElementById('userEmail').textContent = user.email;
+                    loadAuditHistory();
+                }
+            })
+            .catch(() => {
+                window.location.href = '/login.html';
+            });
+
+        function logout() {
+            fetch('/api/logout', { method: 'POST' })
+                .then(() => {
+                    window.location.href = '/index.html';
+                });
+        }
+
+        document.getElementById('auditForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const businessDescription = document.getElementById('businessDescription').value;
+            const currentRevenue = document.getElementById('currentRevenue').value;
+            const submitButton = document.getElementById('submitButton');
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const resultDiv = document.getElementById('auditResult');
+            const contentDiv = document.getElementById('auditContent');
+
+            errorDiv.classList.add('hidden');
+            resultDiv.classList.add('hidden');
+
+            submitButton.disabled = true;
+            submitButton.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
+
+            try {
+                const response = await fetch('/api/audit', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ businessDescription, currentRevenue })
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    contentDiv.textContent = data.audit;
+                    resultDiv.classList.remove('hidden');
+                    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    loadAuditHistory();
+                    document.getElementById('auditForm').reset();
+                } else {
+                    errorText.textContent = data.error || 'Failed to generate audit';
+                    errorDiv.classList.remove('hidden');
+                }
+            } catch (error) {
+                errorText.textContent = 'Network error. Please try again.';
+                errorDiv.classList.remove('hidden');
+            } finally {
+                submitButton.disabled = false;
+                submitButton.textContent = 'Generate AI Audit';
+            }
+        });
+
+        async function loadAuditHistory() {
+            try {
+                const response = await fetch('/api/audits');
+                if (!response.ok) return;
+
+                const audits = await response.json();
+                const historyDiv = document.getElementById('auditHistory');
+
+                if (audits.length === 0) {
+                    historyDiv.innerHTML = '<p class="text-gray-500 text-sm">No previous audits</p>';
+                    return;
+                }
+
+                historyDiv.innerHTML = audits.map(audit => `
+                    <div class="border border-gray-200 rounded-lg p-4">
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs text-gray-500">${new Date(audit.created_at).toLocaleDateString()}</span>
+                            <span class="text-xs bg-gray-100 px-2 py-1 rounded">${audit.current_revenue || 'N/A'}</span>
+                        </div>
+                        <p class="text-sm text-gray-700 mb-2">${audit.business_description.substring(0, 100)}...</p>
+                        <details class="text-sm">
+                            <summary class="cursor-pointer text-slate-900 font-medium">View full audit</summary>
+                            <div class="mt-3 pt-3 border-t border-gray-200 whitespace-pre-wrap text-gray-700">${audit.ai_response}</div>
+                        </details>
+                    </div>
+                `).join('');
+            } catch (error) {
+                console.error('Failed to load history:', error);
+            }
+        }
+    </script>
+</body>
+</html>

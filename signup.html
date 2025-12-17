@@ -122,82 +122,30 @@
 
             <!-- Form Card -->
             <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 animate-slide-up" style="animation-delay: 0.1s;">
-                <form id="signupForm" action="https://formspree.io/f/xzznnakr" method="POST" class="space-y-5">
-                    <!-- FormSpree Configuration -->
-                    <input type="hidden" name="_subject" value="New Signup - ScaleAI">
-                    <input type="hidden" name="form_type" value="signup">
-                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
-                    <!-- Name -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
-                        <input
-                            type="text"
-                            id="fullName"
-                            name="name"
-                            required
-                            placeholder="John Doe"
-                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                        />
-                    </div>
-
+                <form id="signupForm" class="space-y-5">
                     <!-- Email -->
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
                         <input
                             type="email"
                             id="email"
-                            name="email"
                             required
                             placeholder="john@example.com"
                             class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
                         />
                     </div>
 
-                    <!-- Current Situation -->
+                    <!-- Password -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What best describes you? *</label>
-                        <select
-                            id="situation"
-                            name="situation"
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Password *</label>
+                        <input
+                            type="password"
+                            id="password"
                             required
+                            placeholder="Minimum 6 characters"
+                            minlength="6"
                             class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                        >
-                            <option value="">Select...</option>
-                            <option value="solo-educator">Solo educator (courses, coaching)</option>
-                            <option value="agency">Agency/team serving educators</option>
-                            <option value="content-creator">Content creator/influencer</option>
-                            <option value="bootcamp">Coding bootcamp/training program</option>
-                            <option value="other">Other education business</option>
-                        </select>
-                    </div>
-
-                    <!-- Monthly Revenue -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Monthly Revenue</label>
-                        <select
-                            id="revenue"
-                            name="revenue"
-                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
-                        >
-                            <option value="">Select range...</option>
-                            <option value="0-5k">$0 - $5k</option>
-                            <option value="5k-10k">$5k - $10k</option>
-                            <option value="10k-25k">$10k - $25k</option>
-                            <option value="25k-50k">$25k - $50k</option>
-                            <option value="50k+">$50k+</option>
-                        </select>
-                    </div>
-
-                    <!-- Biggest Challenge -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">What's your biggest challenge right now?</label>
-                        <textarea
-                            id="challenge"
-                            name="challenge"
-                            rows="3"
-                            placeholder="e.g., Spending too much time on support, can't scale content..."
-                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent resize-none"
-                        ></textarea>
+                        />
                     </div>
 
                     <!-- Error Message -->
@@ -232,9 +180,8 @@
                         Get Started Now
                     </button>
 
-                    <p class="text-xs text-gray-500 text-center">
-                        By signing up, you agree to our Terms of Service and Privacy Policy.<br>
-                        No credit card required • Free consultation included
+                    <p class="text-sm text-gray-600 text-center">
+                        Already have an account? <a href="login.html" class="text-slate-900 font-medium hover:underline">Sign in</a>
                     </p>
                 </form>
             </div>
@@ -259,10 +206,8 @@
         document.getElementById('signupForm').addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const form = e.target;
-            const fullName = document.getElementById('fullName').value.trim();
             const email = document.getElementById('email').value.trim();
-            const situation = document.getElementById('situation').value;
+            const password = document.getElementById('password').value;
             const errorDiv = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
             const successDiv = document.getElementById('successMessage');
@@ -272,54 +217,32 @@
             errorDiv.classList.add('hidden');
             successDiv.classList.add('hidden');
 
-            // Validation
-            if (!fullName || !email || !situation) {
-                errorText.textContent = 'Please fill in all required fields.';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
-            // Email validation
-            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-            if (!emailRegex.test(email)) {
-                errorText.textContent = 'Please enter a valid email address.';
-                errorDiv.classList.remove('hidden');
-                return;
-            }
-
             // Show loading state
             submitButton.disabled = true;
-            submitButton.innerHTML = `
-                <svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                </svg>
-            `;
+            submitButton.textContent = 'Creating account...';
 
             try {
-                // Submit to FormSpree
-                const response = await fetch(form.action, {
+                const response = await fetch('/api/signup', {
                     method: 'POST',
-                    body: new FormData(form),
-                    headers: {
-                        'Accept': 'application/json'
-                    }
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
                 });
 
-                if (response.ok) {
-                    // Success!
-                    successDiv.classList.remove('hidden');
-                    form.reset();
+                const data = await response.json();
 
-                    // Redirect to thank you page after 2 seconds
+                if (response.ok) {
+                    successDiv.classList.remove('hidden');
                     setTimeout(() => {
-                        window.location.href = 'index.html?signup=success';
-                    }, 2000);
+                        window.location.href = '/dashboard.html';
+                    }, 1000);
                 } else {
-                    throw new Error('Form submission failed');
+                    errorText.textContent = data.error || 'Signup failed';
+                    errorDiv.classList.remove('hidden');
+                    submitButton.disabled = false;
+                    submitButton.textContent = 'Get Started Now';
                 }
             } catch (error) {
-                errorText.textContent = 'Something went wrong. Please try again.';
+                errorText.textContent = 'Network error. Please try again.';
                 errorDiv.classList.remove('hidden');
                 submitButton.disabled = false;
                 submitButton.textContent = 'Get Started Now';
