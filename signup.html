@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Get started with ScaleAI - Turn your knowledge into an automated empire">
+    <title>Get Started | ScaleAI Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e',
+                            900: '#14532d',
+                        }
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.6s cubic-bezier(0.2, 0, 0, 1)',
+                        'slide-up': 'slideUp 0.6s cubic-bezier(0.2, 0, 0, 1)',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: 0 },
+                            '100%': { opacity: 1 }
+                        },
+                        slideUp: {
+                            '0%': { opacity: 0, transform: 'translateY(30px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            backface-visibility: hidden;
+        }
+
+        body {
+            background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+
+        .btn-hover-effect {
+            transition: all 0.08s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .btn-hover-effect:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px -5px rgba(34, 197, 94, 0.3);
+        }
+
+        .btn-hover-effect:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px -2px rgba(34, 197, 94, 0.2);
+        }
+
+        .input-focus {
+            transition: all 0.08s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        .input-focus:focus {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+        }
+
+        .checkmark-animation {
+            animation: scaleIn 0.3s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        @keyframes scaleIn {
+            0% { transform: scale(0); opacity: 0; }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden">
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 top-0 left-0 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <a href="index.html" class="font-bold text-xl tracking-tighter flex items-center gap-2 hover:opacity-80 transition-opacity">
+                <div class="w-3 h-3 bg-black rounded-full"></div>
+                ScaleAI
+            </a>
+            <a href="index.html" class="text-sm text-gray-600 hover:text-black transition-colors">
+                ← Back to Home
+            </a>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="pt-32 pb-20 px-6">
+        <div class="max-w-md mx-auto">
+            <!-- Header -->
+            <div class="text-center mb-10 animate-slide-up">
+                <div class="w-16 h-16 bg-slate-900 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/>
+                    </svg>
+                </div>
+                <h1 class="text-4xl font-bold tracking-tight mb-3">Start Your Journey</h1>
+                <p class="text-gray-600 text-lg">Join 100+ educators automating their way to freedom</p>
+            </div>
+
+            <!-- Form Card -->
+            <div class="bg-white rounded-2xl shadow-xl border border-gray-200 p-8 animate-slide-up" style="animation-delay: 0.1s;">
+                <form id="signupForm" class="space-y-5">
+                    <!-- Name -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                        <input
+                            type="text"
+                            id="fullName"
+                            required
+                            placeholder="John Doe"
+                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        />
+                    </div>
+
+                    <!-- Email -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                        <input
+                            type="email"
+                            id="email"
+                            required
+                            placeholder="john@example.com"
+                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        />
+                    </div>
+
+                    <!-- Current Situation -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">What best describes you? *</label>
+                        <select
+                            id="situation"
+                            required
+                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        >
+                            <option value="">Select...</option>
+                            <option value="solo-educator">Solo educator (courses, coaching)</option>
+                            <option value="agency">Agency/team serving educators</option>
+                            <option value="content-creator">Content creator/influencer</option>
+                            <option value="bootcamp">Coding bootcamp/training program</option>
+                            <option value="other">Other education business</option>
+                        </select>
+                    </div>
+
+                    <!-- Monthly Revenue -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Current Monthly Revenue</label>
+                        <select
+                            id="revenue"
+                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent"
+                        >
+                            <option value="">Select range...</option>
+                            <option value="0-5k">$0 - $5k</option>
+                            <option value="5k-10k">$5k - $10k</option>
+                            <option value="10k-25k">$10k - $25k</option>
+                            <option value="25k-50k">$25k - $50k</option>
+                            <option value="50k+">$50k+</option>
+                        </select>
+                    </div>
+
+                    <!-- Biggest Challenge -->
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">What's your biggest challenge right now?</label>
+                        <textarea
+                            id="challenge"
+                            rows="3"
+                            placeholder="e.g., Spending too much time on support, can't scale content..."
+                            class="input-focus w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent resize-none"
+                        ></textarea>
+                    </div>
+
+                    <!-- Error Message -->
+                    <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                        <div class="flex items-center gap-2">
+                            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                            </svg>
+                            <span id="errorText">Please fill in all required fields.</span>
+                        </div>
+                    </div>
+
+                    <!-- Success Message -->
+                    <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm">
+                        <div class="flex items-start gap-3">
+                            <svg class="w-5 h-5 flex-shrink-0 mt-0.5 checkmark-animation" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                            </svg>
+                            <div>
+                                <p class="font-medium mb-1">Welcome to ScaleAI!</p>
+                                <p class="text-xs">We've sent you an email with next steps. Our team will reach out within 24 hours to schedule your onboarding call.</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button
+                        type="submit"
+                        id="submitButton"
+                        class="btn-hover-effect w-full bg-slate-900 text-white px-6 py-4 rounded-full font-bold text-lg hover:bg-slate-800"
+                    >
+                        Get Started Now
+                    </button>
+
+                    <p class="text-xs text-gray-500 text-center">
+                        By signing up, you agree to our Terms of Service and Privacy Policy.<br>
+                        No credit card required • Free consultation included
+                    </p>
+                </form>
+            </div>
+
+            <!-- Social Proof -->
+            <div class="mt-10 text-center animate-fade-in" style="animation-delay: 0.3s;">
+                <p class="text-sm text-gray-500 mb-4">Trusted by educators worldwide</p>
+                <div class="flex justify-center items-center gap-6 flex-wrap">
+                    <div class="flex items-center gap-1">
+                        <span class="text-yellow-400">★★★★★</span>
+                        <span class="text-sm text-gray-600 ml-2">4.9/5 rating</span>
+                    </div>
+                    <div class="text-sm text-gray-600">100+ active users</div>
+                    <div class="text-sm text-gray-600">$2M+ revenue generated</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        // Form submission handler
+        document.getElementById('signupForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const fullName = document.getElementById('fullName').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const situation = document.getElementById('situation').value;
+            const errorDiv = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+            const successDiv = document.getElementById('successMessage');
+            const submitButton = document.getElementById('submitButton');
+
+            // Hide previous messages
+            errorDiv.classList.add('hidden');
+            successDiv.classList.add('hidden');
+
+            // Validation
+            if (!fullName || !email || !situation) {
+                errorText.textContent = 'Please fill in all required fields.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                errorText.textContent = 'Please enter a valid email address.';
+                errorDiv.classList.remove('hidden');
+                return;
+            }
+
+            // Simulate form submission
+            submitButton.disabled = true;
+            submitButton.innerHTML = `
+                <svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+            `;
+
+            // Simulate API call
+            setTimeout(() => {
+                successDiv.classList.remove('hidden');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Get Started Now';
+
+                // Reset form after 3 seconds
+                setTimeout(() => {
+                    document.getElementById('signupForm').reset();
+                }, 3000);
+
+                // In production, send data to backend:
+                // const formData = {
+                //     fullName,
+                //     email,
+                //     situation,
+                //     revenue: document.getElementById('revenue').value,
+                //     challenge: document.getElementById('challenge').value
+                // };
+                // await fetch('/api/signup', { method: 'POST', body: JSON.stringify(formData) });
+
+            }, 1500);
+        });
+
+        // Animation on load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.animate-slide-up, .animate-fade-in').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+
+                setTimeout(() => {
+                    el.style.transition = 'all 0.6s cubic-bezier(0.2, 0, 0, 1)';
+                    el.style.opacity = '1';
+                    el.style.transform = 'translateY(0)';
+                }, 100);
+            });
+        });
+    </script>
+</body>
+</html>
