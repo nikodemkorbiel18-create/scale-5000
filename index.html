@@ -658,116 +658,114 @@
         </div>
     </section>
 
-    <section id="calculatorSection" class="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden reveal">
+    <section id="calculatorSection" class="py-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden reveal">
         <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
 
         <!-- Animated background elements -->
-        <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
-        <div class="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+        <div class="absolute top-10 left-10 w-64 h-64 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-10 right-10 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
 
-        <div class="max-w-5xl mx-auto px-6 relative z-10">
-            <div class="text-center mb-16">
-                <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-2 mb-6">
-                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div class="max-w-4xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-10">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-3 py-1.5 mb-4">
+                    <svg class="w-3.5 h-3.5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
                     </svg>
-                    <span class="text-sm font-medium text-emerald-400">ROI Calculator</span>
+                    <span class="text-xs font-medium text-emerald-400">ROI Calculator</span>
                 </div>
-                <h2 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Calculate Your Opportunity Cost</h2>
-                <p class="text-gray-400 text-lg max-w-2xl mx-auto">See exactly how much revenue and time you're losing to manual work</p>
+                <h2 class="text-3xl md:text-4xl font-bold mb-3 tracking-tight">Calculate Your Opportunity Cost</h2>
+                <p class="text-gray-400 text-base max-w-xl mx-auto">See exactly how much revenue and time you're losing to manual work</p>
             </div>
 
-            <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl">
+            <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-2xl p-6 md:p-8 shadow-2xl">
                 <!-- Revenue Slider Section -->
-                <div class="mb-12">
-                    <div class="flex items-center justify-between mb-6">
-                        <label class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Current Monthly Revenue</label>
-                        <div class="bg-white/10 rounded-full px-4 py-2">
-                            <span class="font-mono text-2xl font-bold text-white" id="currentVal">$20,000</span>
+                <div class="mb-8">
+                    <div class="flex items-center justify-between mb-4">
+                        <label class="text-xs font-semibold text-gray-400 uppercase tracking-wider">Current Monthly Revenue</label>
+                        <div class="bg-white/10 backdrop-blur-sm rounded-lg px-3 py-1.5">
+                            <span class="font-mono text-xl font-bold text-white" id="currentVal">$20,000</span>
                         </div>
                     </div>
 
-                    <div class="relative w-full h-2 bg-white/10 rounded-full mb-4">
+                    <div class="relative w-full h-1.5 bg-white/10 rounded-full mb-3">
                         <input type="range" min="5000" max="100000" step="1000" value="20000" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" id="revenueRange">
-                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full" style="width: 15%;" id="rangeProgress"></div>
-                        <div class="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-lg border-4 border-slate-900 transition-all duration-75" style="left: 15%;" id="rangeThumb"></div>
+                        <div class="absolute inset-0 h-full bg-gradient-to-r from-emerald-500 via-emerald-400 to-blue-500 rounded-full transition-all duration-150" style="width: 15%;" id="rangeProgress"></div>
+                        <div class="absolute top-1/2 -translate-y-1/2 w-5 h-5 bg-white rounded-full shadow-xl border-2 border-slate-800 transition-all duration-150" style="left: 15%;" id="rangeThumb"></div>
                     </div>
 
                     <div class="flex justify-between text-xs text-gray-500 font-mono">
                         <span>$5k</span>
-                        <span>$25k</span>
                         <span>$50k</span>
-                        <span>$75k</span>
                         <span>$100k</span>
                     </div>
                 </div>
 
                 <!-- Divider -->
-                <div class="relative mb-12">
+                <div class="relative mb-8">
                     <div class="absolute inset-0 flex items-center">
                         <div class="w-full border-t border-white/10"></div>
                     </div>
                     <div class="relative flex justify-center">
-                        <span class="bg-slate-900 px-4 text-sm text-gray-400">Projected Results</span>
+                        <span class="bg-slate-900 px-3 text-xs text-gray-400 font-medium">Projected Results</span>
                     </div>
                 </div>
 
                 <!-- Results Grid -->
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <!-- Annual Revenue Card -->
-                    <div class="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
                                 </svg>
                             </div>
-                            <p class="text-sm font-medium text-gray-300">Annual Revenue</p>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Annual Revenue</p>
                         </div>
-                        <p class="text-4xl font-bold text-white mb-2" id="projectedVal">$312,000</p>
-                        <div class="flex items-center gap-2 text-emerald-400 text-sm font-medium">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                        <p class="text-3xl font-bold text-white mb-1.5" id="projectedVal">$312,000</p>
+                        <div class="flex items-center gap-1.5 text-emerald-400 text-xs font-medium">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20">
                                 <path d="M10 3l7 7-7 7V3z"/>
                             </svg>
-                            <span>+30% with AI automation</span>
+                            <span>+30% with automation</span>
                         </div>
                     </div>
 
                     <!-- Time Saved Card -->
-                    <div class="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
-                            <p class="text-sm font-medium text-gray-300">Time Recovered</p>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Time Recovered</p>
                         </div>
-                        <p class="text-4xl font-bold text-white mb-2">480 hrs</p>
-                        <p class="text-blue-400 text-sm font-medium">Per year saved</p>
+                        <p class="text-3xl font-bold text-white mb-1.5">480 hrs</p>
+                        <p class="text-blue-400 text-xs font-medium">Per year saved</p>
                     </div>
 
                     <!-- ROI Card -->
-                    <div class="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-2xl p-6">
-                        <div class="flex items-center gap-2 mb-3">
-                            <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
-                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <div class="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-xl p-5">
+                        <div class="flex items-center gap-2 mb-2">
+                            <div class="w-8 h-8 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-4 h-4 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
                                 </svg>
                             </div>
-                            <p class="text-sm font-medium text-gray-300">Break Even</p>
+                            <p class="text-xs font-medium text-gray-400 uppercase tracking-wide">Break Even</p>
                         </div>
-                        <p class="text-4xl font-bold text-white mb-2">2 weeks</p>
-                        <p class="text-purple-400 text-sm font-medium">Typical ROI timeframe</p>
+                        <p class="text-3xl font-bold text-white mb-1.5">2 weeks</p>
+                        <p class="text-purple-400 text-xs font-medium">Typical ROI timeframe</p>
                     </div>
                 </div>
 
                 <!-- CTA Button -->
-                <div class="mt-10 text-center">
-                    <button onclick="openBookingModal()" class="btn-hover-effect bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-emerald-500/50 transition-all">
+                <div class="mt-8 text-center">
+                    <button onclick="openBookingModal()" class="btn-hover-effect bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-6 py-3 rounded-full font-bold shadow-lg hover:shadow-emerald-500/50 transition-all">
                         Start Saving Time & Money
                     </button>
-                    <p class="mt-4 text-sm text-gray-400">No credit card required • Free consultation</p>
+                    <p class="mt-3 text-xs text-gray-400">No credit card required • Free consultation</p>
                 </div>
             </div>
         </div>
@@ -1294,12 +1292,18 @@
                 </div>
 
                 <!-- Modal Body - Booking Form -->
-                <form id="bookingForm" class="p-6 space-y-4">
+                <form id="bookingForm" action="https://formspree.io/f/xzznnakr" method="POST" class="p-6 space-y-4">
+                    <!-- Hidden field to identify form type -->
+                    <input type="hidden" name="_subject" value="New Booking Request - ScaleAI">
+                    <input type="hidden" name="form_type" value="booking">
+                    <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off">
+
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
                         <input
                             type="text"
                             id="bookingName"
+                            name="name"
                             required
                             placeholder="John Doe"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all instant-hover"
@@ -1311,6 +1315,7 @@
                         <input
                             type="email"
                             id="bookingEmail"
+                            name="email"
                             required
                             placeholder="john@example.com"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all instant-hover"
@@ -1321,6 +1326,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">Current Monthly Revenue</label>
                         <select
                             id="bookingRevenue"
+                            name="revenue"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all instant-hover"
                         >
                             <option value="">Select range...</option>
@@ -1337,6 +1343,7 @@
                         <input
                             type="datetime-local"
                             id="bookingDateTime"
+                            name="preferred_datetime"
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all instant-hover"
                         />
                     </div>
@@ -1345,6 +1352,7 @@
                         <label class="block text-sm font-medium text-gray-700 mb-2">What's your biggest challenge?</label>
                         <textarea
                             id="bookingChallenge"
+                            name="challenge"
                             rows="3"
                             placeholder="e.g., Too many support emails, can't scale content creation..."
                             class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black focus:border-transparent transition-all instant-hover resize-none"
@@ -1420,10 +1428,17 @@
         const revealObserver = new IntersectionObserver((entries, observer) => {
             entries.forEach(entry => {
                 if(entry.isIntersecting) {
-                    entry.target.classList.add('active');
+                    // Add a slight delay for smoother appearance
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            entry.target.classList.add('active');
+                        });
+                    });
+                    // Stop observing once revealed (performance optimization)
+                    observer.unobserve(entry.target);
                 }
             });
-        }, { threshold: 0.05, rootMargin: '50px' });
+        }, { threshold: 0.1, rootMargin: '0px' });
 
         revealElements.forEach(el => revealObserver.observe(el));
 
@@ -1748,7 +1763,20 @@
 
         function startAutoAdvance() {
             clearInterval(autoAdvanceInterval);
-            
+
+            // Reset progress bar
+            autoAdvanceProgress.style.transition = 'none';
+            autoAdvanceProgress.style.width = '0%';
+
+            // Force reflow
+            autoAdvanceProgress.offsetHeight;
+
+            // Start animation
+            requestAnimationFrame(() => {
+                autoAdvanceProgress.style.transition = 'width 5000ms linear';
+                autoAdvanceProgress.style.width = '100%';
+            });
+
             autoAdvanceInterval = setInterval(() => {
                 if (currentReviewSet < totalReviewSets - 1) {
                     currentReviewSet++;
@@ -1756,7 +1784,17 @@
                     currentReviewSet = 0;
                 }
                 updateCarouselPosition();
-            }, 4000);
+
+                // Reset progress bar for next cycle
+                autoAdvanceProgress.style.transition = 'none';
+                autoAdvanceProgress.style.width = '0%';
+                autoAdvanceProgress.offsetHeight;
+
+                requestAnimationFrame(() => {
+                    autoAdvanceProgress.style.transition = 'width 5000ms linear';
+                    autoAdvanceProgress.style.width = '100%';
+                });
+            }, 5000);
         }
 
         // Event listeners with instant feedback
@@ -1764,6 +1802,7 @@
             if (currentReviewSet > 0) {
                 currentReviewSet--;
                 updateCarouselPosition();
+                startAutoAdvance(); // Restart timer
             }
         });
 
@@ -1771,6 +1810,7 @@
             if (currentReviewSet < totalReviewSets - 1) {
                 currentReviewSet++;
                 updateCarouselPosition();
+                startAutoAdvance(); // Restart timer
             }
         });
 
@@ -1779,7 +1819,9 @@
         carouselContainer.addEventListener('mouseenter', () => {
             clearInterval(autoAdvanceInterval);
             autoAdvanceProgress.style.transition = 'none';
-            autoAdvanceProgress.style.width = autoAdvanceProgress.style.width;
+            const currentWidth = autoAdvanceProgress.getBoundingClientRect().width;
+            const containerWidth = autoAdvanceProgress.parentElement.getBoundingClientRect().width;
+            autoAdvanceProgress.style.width = (currentWidth / containerWidth * 100) + '%';
         });
 
         carouselContainer.addEventListener('mouseleave', () => {
@@ -1949,10 +1991,12 @@
         document.getElementById('bookingForm')?.addEventListener('submit', async (e) => {
             e.preventDefault();
 
+            const form = e.target;
             const name = document.getElementById('bookingName').value.trim();
             const email = document.getElementById('bookingEmail').value.trim();
             const errorDiv = document.getElementById('bookingError');
             const successDiv = document.getElementById('bookingSuccess');
+            const submitButton = form.querySelector('button[type="submit"]');
 
             // Hide previous messages
             errorDiv.classList.add('hidden');
@@ -1960,6 +2004,7 @@
 
             // Basic validation
             if (!name || !email) {
+                errorDiv.querySelector('span').textContent = 'Please fill in all required fields.';
                 errorDiv.classList.remove('hidden');
                 return;
             }
@@ -1972,33 +2017,41 @@
                 return;
             }
 
-            // Simulate form submission (in production, this would be an API call)
-            const submitButton = e.target.querySelector('button[type="submit"]');
+            // Show loading state
             submitButton.disabled = true;
-            submitButton.textContent = 'Submitting...';
+            submitButton.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
 
-            // Simulate API call
-            setTimeout(() => {
-                successDiv.classList.remove('hidden');
+            try {
+                // Submit to FormSpree
+                const response = await fetch(form.action, {
+                    method: 'POST',
+                    body: new FormData(form),
+                    headers: {
+                        'Accept': 'application/json'
+                    }
+                });
+
+                if (response.ok) {
+                    // Success!
+                    successDiv.classList.remove('hidden');
+                    form.reset();
+
+                    // Auto-close modal and show thank you message
+                    setTimeout(() => {
+                        closeModal();
+                        // Show a nice thank you message
+                        alert('Thank you! We\'ve received your booking request and will be in touch within 24 hours.');
+                    }, 1500);
+                } else {
+                    throw new Error('Form submission failed');
+                }
+            } catch (error) {
+                errorDiv.querySelector('span').textContent = 'Something went wrong. Please try again.';
+                errorDiv.classList.remove('hidden');
+            } finally {
                 submitButton.disabled = false;
                 submitButton.textContent = 'Submit Booking Request';
-
-                // Auto-close modal after success
-                setTimeout(() => {
-                    closeModal();
-                }, 2000);
-
-                // In production, you would send data to your backend:
-                // const formData = {
-                //     name: name,
-                //     email: email,
-                //     revenue: document.getElementById('bookingRevenue').value,
-                //     dateTime: document.getElementById('bookingDateTime').value,
-                //     challenge: document.getElementById('bookingChallenge').value
-                // };
-                // await fetch('/api/bookings', { method: 'POST', body: JSON.stringify(formData) });
-
-            }, 1000);
+            }
         });
 
         // ========================================
