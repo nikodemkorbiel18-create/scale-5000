@@ -411,6 +411,41 @@
             transform: translateY(-1px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
+
+        /* MINIMALISTIC HOVER-ONLY SCROLLBAR */
+        /* Hide scrollbar by default, show on hover */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: transparent transparent;
+        }
+
+        *:hover {
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
+
+        /* Webkit browsers (Chrome, Safari, Edge) */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: transparent;
+            border-radius: 10px;
+            transition: background 0.2s ease;
+        }
+
+        *:hover::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        *:hover::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.4);
+        }
     </style>
 </head>
 <body class="overflow-x-hidden selection:bg-brand-100 selection:text-brand-900">
@@ -623,42 +658,116 @@
         </div>
     </section>
 
-    <section id="calculatorSection" class="py-20 bg-slate-900 text-white relative overflow-hidden reveal">
+    <section id="calculatorSection" class="py-24 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 text-white relative overflow-hidden reveal">
         <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
-        <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
-            <h2 class="text-3xl font-bold mb-4">Calculate Your Opportunity Cost</h2>
-            <p class="text-gray-400 mb-12">How much money are you leaving on the table by doing manual work?</p>
 
-            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto shadow-2xl">
-                <div class="mb-10 text-left">
-                    <label class="text-sm font-mono text-gray-400 block mb-4">CURRENT MONTHLY REVENUE</label>
-                    <div class="relative w-full h-12 flex items-center">
-                        <input type="range" min="5000" max="100000" step="1000" value="20000" class="w-full z-20 focus:outline-none" id="revenueRange">
+        <!-- Animated background elements -->
+        <div class="absolute top-20 left-10 w-72 h-72 bg-emerald-500/10 rounded-full blur-3xl animate-pulse-slow"></div>
+        <div class="absolute bottom-20 right-10 w-96 h-96 bg-blue-500/10 rounded-full blur-3xl animate-pulse-slow" style="animation-delay: 1s;"></div>
+
+        <div class="max-w-5xl mx-auto px-6 relative z-10">
+            <div class="text-center mb-16">
+                <div class="inline-flex items-center gap-2 bg-emerald-500/10 border border-emerald-500/20 rounded-full px-4 py-2 mb-6">
+                    <svg class="w-4 h-4 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 7h6m0 10v-3m-3 3h.01M9 17h.01M9 14h.01M12 14h.01M15 11h.01M12 11h.01M9 11h.01M7 21h10a2 2 0 002-2V5a2 2 0 00-2-2H7a2 2 0 00-2 2v14a2 2 0 002 2z"/>
+                    </svg>
+                    <span class="text-sm font-medium text-emerald-400">ROI Calculator</span>
+                </div>
+                <h2 class="text-4xl md:text-5xl font-bold mb-4 tracking-tight">Calculate Your Opportunity Cost</h2>
+                <p class="text-gray-400 text-lg max-w-2xl mx-auto">See exactly how much revenue and time you're losing to manual work</p>
+            </div>
+
+            <div class="bg-white/5 backdrop-blur-xl border border-white/10 rounded-3xl p-8 md:p-12 shadow-2xl">
+                <!-- Revenue Slider Section -->
+                <div class="mb-12">
+                    <div class="flex items-center justify-between mb-6">
+                        <label class="text-sm font-semibold text-gray-300 uppercase tracking-wider">Current Monthly Revenue</label>
+                        <div class="bg-white/10 rounded-full px-4 py-2">
+                            <span class="font-mono text-2xl font-bold text-white" id="currentVal">$20,000</span>
+                        </div>
                     </div>
-                    
-                    <div class="flex justify-between mt-2">
-                        <span class="font-mono text-xl text-gray-400">$5k</span>
-                        <span class="font-mono text-3xl font-bold text-brand-500" id="currentVal">$20,000</span>
-                        <span class="font-mono text-xl text-gray-400">$100k</span>
+
+                    <div class="relative w-full h-2 bg-white/10 rounded-full mb-4">
+                        <input type="range" min="5000" max="100000" step="1000" value="20000" class="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-20" id="revenueRange">
+                        <div class="absolute inset-0 w-full h-full bg-gradient-to-r from-emerald-500 to-blue-500 rounded-full" style="width: 15%;" id="rangeProgress"></div>
+                        <div class="absolute top-1/2 -translate-y-1/2 w-6 h-6 bg-white rounded-full shadow-lg border-4 border-slate-900 transition-all duration-75" style="left: 15%;" id="rangeThumb"></div>
+                    </div>
+
+                    <div class="flex justify-between text-xs text-gray-500 font-mono">
+                        <span>$5k</span>
+                        <span>$25k</span>
+                        <span>$50k</span>
+                        <span>$75k</span>
+                        <span>$100k</span>
                     </div>
                 </div>
 
-                <hr class="border-white/10 mb-8">
+                <!-- Divider -->
+                <div class="relative mb-12">
+                    <div class="absolute inset-0 flex items-center">
+                        <div class="w-full border-t border-white/10"></div>
+                    </div>
+                    <div class="relative flex justify-center">
+                        <span class="bg-slate-900 px-4 text-sm text-gray-400">Projected Results</span>
+                    </div>
+                </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
-                    <div>
-                        <p class="text-sm text-gray-400 mb-1">Projected Annual Revenue with AI</p>
-                        <p class="text-4xl font-bold text-white" id="projectedVal">$312,000</p>
-                        <p class="text-xs text-green-400 mt-1 flex items-center gap-1">
-                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M12 7l-5 5h10l-5-5z"/></svg>
-                            +30% Efficiency Gain
-                        </p>
+                <!-- Results Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <!-- Annual Revenue Card -->
+                    <div class="bg-gradient-to-br from-emerald-500/10 to-emerald-500/5 border border-emerald-500/20 rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-10 h-10 bg-emerald-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-300">Annual Revenue</p>
+                        </div>
+                        <p class="text-4xl font-bold text-white mb-2" id="projectedVal">$312,000</p>
+                        <div class="flex items-center gap-2 text-emerald-400 text-sm font-medium">
+                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                                <path d="M10 3l7 7-7 7V3z"/>
+                            </svg>
+                            <span>+30% with AI automation</span>
+                        </div>
                     </div>
-                    <div>
-                        <p class="text-sm text-gray-400 mb-1">Recovered Hours / Year</p>
-                        <p class="text-4xl font-bold text-white">480 hrs</p>
-                        <p class="text-xs text-gray-500 mt-1">Based on 10hrs/week automation</p>
+
+                    <!-- Time Saved Card -->
+                    <div class="bg-gradient-to-br from-blue-500/10 to-blue-500/5 border border-blue-500/20 rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-10 h-10 bg-blue-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-300">Time Recovered</p>
+                        </div>
+                        <p class="text-4xl font-bold text-white mb-2">480 hrs</p>
+                        <p class="text-blue-400 text-sm font-medium">Per year saved</p>
                     </div>
+
+                    <!-- ROI Card -->
+                    <div class="bg-gradient-to-br from-purple-500/10 to-purple-500/5 border border-purple-500/20 rounded-2xl p-6">
+                        <div class="flex items-center gap-2 mb-3">
+                            <div class="w-10 h-10 bg-purple-500/20 rounded-lg flex items-center justify-center">
+                                <svg class="w-5 h-5 text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                                </svg>
+                            </div>
+                            <p class="text-sm font-medium text-gray-300">Break Even</p>
+                        </div>
+                        <p class="text-4xl font-bold text-white mb-2">2 weeks</p>
+                        <p class="text-purple-400 text-sm font-medium">Typical ROI timeframe</p>
+                    </div>
+                </div>
+
+                <!-- CTA Button -->
+                <div class="mt-10 text-center">
+                    <button onclick="openBookingModal()" class="btn-hover-effect bg-gradient-to-r from-emerald-500 to-emerald-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-lg hover:shadow-emerald-500/50 transition-all">
+                        Start Saving Time & Money
+                    </button>
+                    <p class="mt-4 text-sm text-gray-400">No credit card required • Free consultation</p>
                 </div>
             </div>
         </div>
@@ -704,13 +813,21 @@
     </section>
 
     <!-- FAQ SECTION -->
-    <section class="py-24 max-w-4xl mx-auto px-6 reveal" id="faq-section">
-        <div class="text-center mb-12">
-            <h2 class="text-4xl font-bold tracking-tight mb-4">Frequently Asked Questions</h2>
-            <p class="text-gray-600 text-lg">Everything you need to know about ScaleAI Systems</p>
+    <section class="py-24 max-w-7xl mx-auto px-6 reveal" id="faq-section">
+        <div class="text-center mb-16">
+            <div class="inline-flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-full px-4 py-2 mb-6">
+                <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <span class="text-sm font-medium text-blue-600">FAQ</span>
+            </div>
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tight mb-4">Frequently Asked Questions</h2>
+            <p class="text-gray-600 text-lg max-w-2xl mx-auto">Everything you need to know about scaling your education business with AI</p>
         </div>
 
-        <div class="space-y-4" id="faqAccordion">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <!-- Left Column: FAQ Items (2/3 width) -->
+            <div class="lg:col-span-2 space-y-4" id="faqAccordion">
             <!-- FAQ Item 1 -->
             <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-150">
                 <button onclick="toggleFAQ(0)" class="faq-question w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors instant-hover">
@@ -824,6 +941,182 @@
                             <li><strong>Community access:</strong> Private Slack group with 100+ educators using ScaleAI</li>
                         </ul>
                         <p class="mt-3">We also maintain an extensive <strong>knowledge base</strong> with video tutorials, step-by-step guides, and troubleshooting resources. You're never alone in this journey.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 6 -->
+            <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-150">
+                <button onclick="toggleFAQ(5)" class="faq-question w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors instant-hover">
+                    <span class="font-semibold text-lg pr-8">Can ScaleAI replace my entire team?</span>
+                    <svg class="faq-icon w-6 h-6 flex-shrink-0 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </button>
+                <div class="faq-answer overflow-hidden transition-all duration-200 ease-in-out" style="max-height: 0;">
+                    <div class="px-6 pb-5 pt-2 text-gray-600 leading-relaxed">
+                        <p>ScaleAI is designed to <strong>augment, not replace</strong> your team. It handles:</p>
+                        <ul class="list-disc ml-6 mt-3 space-y-1">
+                            <li><strong>Repetitive tasks:</strong> Student Q&A, onboarding, scheduling, data entry</li>
+                            <li><strong>24/7 availability:</strong> Tasks that don't require human creativity or empathy</li>
+                            <li><strong>Data processing:</strong> Analytics, reporting, pattern recognition</li>
+                        </ul>
+                        <p class="mt-3">Your team remains focused on <strong>high-value activities</strong> like curriculum development, personalized mentorship, community building, and strategic growth. Most users reduce their team size or redirect staff to revenue-generating activities.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 7 -->
+            <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-150">
+                <button onclick="toggleFAQ(6)" class="faq-question w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors instant-hover">
+                    <span class="font-semibold text-lg pr-8">Is my student data secure and private?</span>
+                    <svg class="faq-icon w-6 h-6 flex-shrink-0 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </button>
+                <div class="faq-answer overflow-hidden transition-all duration-200 ease-in-out" style="max-height: 0;">
+                    <div class="px-6 pb-5 pt-2 text-gray-600 leading-relaxed">
+                        <p><strong>Absolutely.</strong> We take data security extremely seriously:</p>
+                        <ul class="list-disc ml-6 mt-3 space-y-2">
+                            <li><strong>Enterprise-grade encryption:</strong> All data encrypted in transit (TLS 1.3) and at rest (AES-256)</li>
+                            <li><strong>GDPR & CCPA compliant:</strong> Full compliance with international data protection regulations</li>
+                            <li><strong>SOC 2 Type II certified:</strong> Regular third-party security audits</li>
+                            <li><strong>Zero data sharing:</strong> We never sell or share your student data with third parties</li>
+                            <li><strong>Role-based access:</strong> Granular permissions control who sees what</li>
+                        </ul>
+                        <p class="mt-3">Your data is stored on secure AWS servers with automatic backups and 99.9% uptime SLA.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 8 -->
+            <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-150">
+                <button onclick="toggleFAQ(7)" class="faq-question w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors instant-hover">
+                    <span class="font-semibold text-lg pr-8">What if I'm not tech-savvy? Can I still use this?</span>
+                    <svg class="faq-icon w-6 h-6 flex-shrink-0 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </button>
+                <div class="faq-answer overflow-hidden transition-all duration-200 ease-in-out" style="max-height: 0;">
+                    <div class="px-6 pb-5 pt-2 text-gray-600 leading-relaxed">
+                        <p><strong>Yes, absolutely!</strong> ScaleAI is built for educators, not engineers. Here's how we make it easy:</p>
+                        <ul class="list-disc ml-6 mt-3 space-y-2">
+                            <li><strong>White-glove onboarding:</strong> Our team handles all technical setup for you</li>
+                            <li><strong>No-code interface:</strong> Simple dashboard with drag-and-drop functionality</li>
+                            <li><strong>Guided tutorials:</strong> Step-by-step video walkthroughs for every feature</li>
+                            <li><strong>Live onboarding calls:</strong> Personalized training sessions included</li>
+                            <li><strong>24/7 support:</strong> Human help available whenever you need it</li>
+                        </ul>
+                        <p class="mt-3">Most users are fully operational within 2-3 days, even with zero technical background. If you can send an email, you can use ScaleAI.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 9 -->
+            <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-150">
+                <button onclick="toggleFAQ(8)" class="faq-question w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors instant-hover">
+                    <span class="font-semibold text-lg pr-8">Can I cancel anytime? What's your refund policy?</span>
+                    <svg class="faq-icon w-6 h-6 flex-shrink-0 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </button>
+                <div class="faq-answer overflow-hidden transition-all duration-200 ease-in-out" style="max-height: 0;">
+                    <div class="px-6 pb-5 pt-2 text-gray-600 leading-relaxed">
+                        <p><strong>Yes, no contracts or commitments.</strong> Our policy is simple and fair:</p>
+                        <ul class="list-disc ml-6 mt-3 space-y-2">
+                            <li><strong>Cancel anytime:</strong> No long-term contracts. Cancel with 30 days notice.</li>
+                            <li><strong>14-day money-back guarantee:</strong> Full refund if you're not satisfied within the first 2 weeks</li>
+                            <li><strong>Pro-rated refunds:</strong> If you cancel mid-month, we refund the unused portion</li>
+                            <li><strong>Data export:</strong> Take all your data with you in standard formats (CSV, JSON)</li>
+                        </ul>
+                        <p class="mt-3">We're confident you'll see ROI quickly, but if it's not right for you, we make it easy to leave. <strong>No hard feelings, no hidden fees.</strong></p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- FAQ Item 10 -->
+            <div class="faq-item bg-white border border-gray-200 rounded-2xl overflow-hidden transition-all duration-150">
+                <button onclick="toggleFAQ(9)" class="faq-question w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors instant-hover">
+                    <span class="font-semibold text-lg pr-8">Do you offer a free trial or demo?</span>
+                    <svg class="faq-icon w-6 h-6 flex-shrink-0 transition-transform duration-200 transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                </button>
+                <div class="faq-answer overflow-hidden transition-all duration-200 ease-in-out" style="max-height: 0;">
+                    <div class="px-6 pb-5 pt-2 text-gray-600 leading-relaxed">
+                        <p>We don't offer a traditional "trial" because setup requires custom AI training. Instead, we offer something better:</p>
+                        <ul class="list-disc ml-6 mt-3 space-y-2">
+                            <li><strong>Free strategy audit:</strong> 45-minute call where we analyze your business and show you exactly where AI can help</li>
+                            <li><strong>Custom demo:</strong> We build a proof-of-concept using YOUR actual data and content</li>
+                            <li><strong>ROI projection:</strong> Detailed analysis of time/money savings specific to your business</li>
+                            <li><strong>14-day money-back guarantee:</strong> Full refund if you're not satisfied (functions as a trial period)</li>
+                        </ul>
+                        <p class="mt-3">Book your free audit below and we'll show you exactly how ScaleAI would work for your specific situation.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+            <!-- Right Column: Animated Character Box (1/3 width) -->
+            <div class="lg:col-span-1">
+                <div class="sticky top-24">
+                    <div class="bg-gradient-to-br from-blue-50 to-purple-50 border border-gray-200 rounded-3xl p-8 shadow-lg overflow-hidden relative">
+                        <!-- Decorative elements -->
+                        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-200/30 rounded-full blur-2xl"></div>
+                        <div class="absolute bottom-0 left-0 w-24 h-24 bg-purple-200/30 rounded-full blur-2xl"></div>
+
+                        <!-- Animated AI Character -->
+                        <div class="relative z-10 text-center mb-6">
+                            <div class="w-32 h-32 mx-auto mb-4 relative">
+                                <!-- AI Robot Icon with animation -->
+                                <div class="absolute inset-0 bg-gradient-to-br from-blue-500 to-purple-600 rounded-3xl animate-pulse-slow"></div>
+                                <div class="absolute inset-2 bg-white rounded-3xl flex items-center justify-center">
+                                    <svg class="w-16 h-16 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"/>
+                                    </svg>
+                                </div>
+                                <!-- Floating particles -->
+                                <div class="absolute -top-2 -right-2 w-3 h-3 bg-blue-400 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                                <div class="absolute -bottom-2 -left-2 w-3 h-3 bg-purple-400 rounded-full animate-bounce" style="animation-delay: 0.3s;"></div>
+                                <div class="absolute top-1/2 -right-3 w-2 h-2 bg-emerald-400 rounded-full animate-bounce" style="animation-delay: 0.5s;"></div>
+                            </div>
+                            <h3 class="text-2xl font-bold text-gray-900 mb-2">Still have questions?</h3>
+                            <p class="text-gray-600 text-sm">Our AI assistant is here to help</p>
+                        </div>
+
+                        <!-- Features list -->
+                        <div class="space-y-3 mb-6 relative z-10">
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-4 h-4 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-700"><strong>Instant answers</strong> to your questions</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-4 h-4 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-700"><strong>Custom ROI</strong> calculation</p>
+                            </div>
+                            <div class="flex items-start gap-3">
+                                <div class="w-6 h-6 bg-emerald-100 rounded-lg flex items-center justify-center flex-shrink-0 mt-0.5">
+                                    <svg class="w-4 h-4 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                                    </svg>
+                                </div>
+                                <p class="text-sm text-gray-700"><strong>Free consultation</strong> booking</p>
+                            </div>
+                        </div>
+
+                        <!-- CTA Button -->
+                        <button onclick="openBookingModal()" class="btn-hover-effect w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-4 rounded-xl font-bold shadow-lg hover:shadow-xl transition-all">
+                            Book Free Consultation
+                        </button>
+                        <p class="text-xs text-gray-500 text-center mt-3">Average response time: 2 min</p>
                     </div>
                 </div>
             </div>
@@ -1134,18 +1427,32 @@
 
         revealElements.forEach(el => revealObserver.observe(el));
 
-        // 2. CALCULATOR LOGIC
+        // 2. CALCULATOR LOGIC WITH CUSTOM SLIDER
         const slider = document.getElementById('revenueRange');
         const currentDisplay = document.getElementById('currentVal');
         const projectedDisplay = document.getElementById('projectedVal');
+        const rangeProgress = document.getElementById('rangeProgress');
+        const rangeThumb = document.getElementById('rangeThumb');
 
-        slider.addEventListener('input', (e) => {
-            const val = parseInt(e.target.value);
+        function updateCalculator(value) {
+            const val = parseInt(value);
             currentDisplay.textContent = '$' + val.toLocaleString();
             const annual = val * 12;
             const projected = annual * 1.3;
             projectedDisplay.textContent = '$' + Math.floor(projected).toLocaleString();
+
+            // Update custom slider visuals
+            const percent = ((val - 5000) / (100000 - 5000)) * 100;
+            rangeProgress.style.width = percent + '%';
+            rangeThumb.style.left = percent + '%';
+        }
+
+        slider.addEventListener('input', (e) => {
+            updateCalculator(e.target.value);
         });
+
+        // Initialize calculator
+        updateCalculator(20000);
 
         // 3. INCREMENTAL DASHBOARD ANIMATIONS - Optimized with rAF
         let studentCount = 4860;
