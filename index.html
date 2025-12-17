@@ -1,0 +1,1073 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Turn your knowledge into an automated empire. ScaleAI helps educators automate student support, onboarding, analytics, and content workflows to scale their education businesses.">
+    <meta name="keywords" content="AI education, online course automation, education business, student support automation, content repurposing, lead scoring, funnel analytics">
+    <meta name="author" content="ScaleAI Systems">
+
+    <!-- Open Graph / Social Media -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="Scale Your Education Business with AI | ScaleAI Systems">
+    <meta property="og:description" content="Turn your knowledge into an automated empire. AI-powered operating system for educators.">
+    <meta property="og:url" content="https://github.com/nikodemkorbiel18-create/scale-5000">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Scale Your Education Business with AI | ScaleAI Systems">
+    <meta name="twitter:description" content="Turn your knowledge into an automated empire. AI-powered operating system for educators.">
+
+    <title>Scale Your Education Business | AI Systems</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            100: '#dcfce7',
+                            500: '#22c55e', // Emerald green for growth
+                            900: '#14532d',
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'shimmer': 'shimmer 2s linear infinite',
+                        'pulse-slow': 'pulse 4s ease-in-out infinite',
+                        'slide-left': 'slideLeft 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                        'slide-right': 'slideRight 0.2s cubic-bezier(0.2, 0, 0, 1)',
+                        'fade-in': 'fadeIn 0.15s cubic-bezier(0.2, 0, 0, 1)',
+                        'count-up': 'countUp 0.05s cubic-bezier(0.2, 0, 0, 1)',
+                        'fade-gradient': 'fadeGradient 1s ease-in-out infinite alternate',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(30px, -50px) scale(1.1)' },
+                            '66%': { transform: 'translate(-20px, 20px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        shimmer: {
+                            '0%': { backgroundPosition: '0 0' },
+                            '100%': { backgroundPosition: '-200% 0' },
+                        },
+                        slideLeft: {
+                            '0%': { transform: 'translateX(40px)', opacity: 0.9 },
+                            '100%': { transform: 'translateX(0)', opacity: 1 }
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-40px)', opacity: 0.9 },
+                            '100%': { transform: 'translateX(0)', opacity: 1 }
+                        },
+                        fadeIn: {
+                            '0%': { opacity: 0, transform: 'translateY(5px)' },
+                            '100%': { opacity: 1, transform: 'translateY(0)' }
+                        },
+                        countUp: {
+                            '0%': { transform: 'translateY(-2px)', opacity: 0.8 },
+                            '100%': { transform: 'translateY(0)', opacity: 1 }
+                        },
+                        fadeGradient: {
+                            '0%': { opacity: 0.95 },
+                            '100%': { opacity: 1 }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* 240Hz OPTIMIZATIONS */
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            backface-visibility: hidden;
+        }
+
+        /* Ultra-fast transitions */
+        .fast-transition {
+            transition: all 0.05s cubic-bezier(0.2, 0, 0, 1) !important;
+        }
+
+        .smooth-transition {
+            transition: all 0.1s cubic-bezier(0.2, 0, 0, 1) !important;
+        }
+
+        /* Hardware acceleration */
+        .gpu-accelerated {
+            transform: translateZ(0);
+            will-change: transform, opacity;
+        }
+
+        /* Base Vercel-like cleanliness */
+        body {
+            background-color: #ffffff;
+            color: #0f172a;
+            -webkit-font-smoothing: antialiased;
+            scroll-behavior: smooth;
+        }
+
+        /* Smooth scrolling */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Abstract Animated Background Shapes */
+        .bg-shape {
+            position: fixed;
+            border-radius: 50%;
+            filter: blur(60px);
+            z-index: -1;
+            opacity: 0.85;
+            animation: blob 15s infinite alternate;
+        }
+        .shape-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #bae6fd; animation-delay: 0s; }
+        .shape-2 { top: 20%; right: -10%; width: 400px; height: 400px; background: #bbf7d0; animation-delay: 2s; }
+        .shape-3 { bottom: -10%; left: 20%; width: 600px; height: 600px; background: #e9d5ff; animation-delay: 4s; }
+
+        /* Grid Shimmer & Beam Effect */
+        .grid-bg {
+            background-size: 40px 40px;
+            background-image: radial-gradient(circle, #cbd5e1 1px, transparent 1px);
+            mask-image: linear-gradient(to bottom, transparent, black, transparent);
+        }
+
+        /* Fade In Logic */
+        .reveal {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.4s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Micro-interactions - ULTRA FAST */
+        .btn-hover-effect {
+            transition: all 0.08s cubic-bezier(0.2, 0, 0, 1);
+        }
+        .btn-hover-effect:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 6px 20px -5px rgba(34, 197, 94, 0.3);
+        }
+        .btn-hover-effect:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 8px -2px rgba(34, 197, 94, 0.2);
+        }
+        
+        /* Card Hover - Faster */
+        .feature-card {
+            transition: border-color 0.08s, transform 0.08s, box-shadow 0.08s;
+        }
+        .feature-card:hover {
+            border-color: #94a3b8;
+            transform: scale(1.002);
+            box-shadow: 0 6px 25px -8px rgba(0,0,0,0.04);
+        }
+
+        /* LOGO HOVER EFFECTS - Faster */
+        .logo-item {
+            transition: all 0.1s cubic-bezier(0.2, 0, 0, 1);
+            filter: grayscale(100%);
+            opacity: 0.5;
+        }
+        .logo-item:hover {
+            filter: grayscale(0%);
+            opacity: 1;
+            transform: scale(1.05);
+        }
+
+        /* CUSTOM SLIDER STYLING */
+        input[type=range] {
+            -webkit-appearance: none; 
+            background: transparent; 
+        }
+        
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 32px;
+            width: 32px;
+            border-radius: 50%;
+            background: #ffffff;
+            border: 4px solid #22c55e;
+            cursor: grab;
+            margin-top: -12px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            transition: transform 0.05s;
+        }
+
+        input[type=range]::-webkit-slider-thumb:active {
+            transform: scale(1.05);
+            cursor: grabbing;
+        }
+
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            background: #334155;
+            border-radius: 999px;
+        }
+        
+        /* Hide Scrollbar for Proof Section but allow scroll */
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        /* Progress bar animation - Faster */
+        .progress-animation {
+            animation: growProgressBar 3s cubic-bezier(0.2, 0, 0, 1) forwards;
+        }
+
+        @keyframes growProgressBar {
+            0% { width: 0%; }
+            100% { width: var(--target-width); }
+        }
+
+        /* Dynamic Navigation - White when in calculator section */
+        .nav-in-calculator {
+            color: white !important;
+        }
+        .nav-in-calculator .logo-dot {
+            background-color: white !important;
+        }
+        .nav-in-calculator button {
+            background-color: white !important;
+            color: black !important;
+            border: 1px solid rgba(255,255,255,0.2) !important;
+        }
+        .nav-in-calculator button:hover {
+            background-color: #f3f4f6 !important;
+        }
+
+        /* Back to Top Button - BOTTOM LEFT */
+        .back-to-top {
+            position: fixed;
+            bottom: 30px;
+            left: 30px;
+            width: 50px;
+            height: 50px;
+            background-color: black;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            z-index: 90;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.15s cubic-bezier(0.2, 0, 0, 1);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        .back-to-top.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        .back-to-top:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        .back-to-top:active {
+            transform: translateY(1px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        /* FIXED REVIEW CAROUSEL */
+        .review-carousel-container {
+            position: relative;
+            overflow: hidden;
+            height: 320px;
+            margin: 0 -8px;
+        }
+
+        .review-carousel-track {
+            display: flex;
+            transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1);
+            height: 100%;
+            width: 100%;
+        }
+
+        .review-carousel-slide {
+            flex: 0 0 100%;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 24px;
+            padding: 0 8px;
+            width: 100%;
+        }
+
+        .review-card {
+            background: white;
+            border: 1px solid #e5e7eb;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Number counter animation - Faster */
+        .counting {
+            animation: countUp 0.05s cubic-bezier(0.2, 0, 0, 1);
+        }
+
+        /* AI EXAMPLE BUBBLE - SMOOTHER FADE */
+        .ai-example-bubble {
+            background: linear-gradient(to bottom, rgba(219, 234, 254, 0.95) 0%, rgba(219, 234, 254, 0.85) 80%, rgba(219, 234, 254, 0) 100%);
+            border: 1px solid rgba(191, 219, 254, 0.5);
+            animation: fadeGradient 1s ease-in-out infinite alternate;
+        }
+
+        /* Button press effect for all buttons - Faster */
+        button:active {
+            transform: translateY(1px);
+            transition: transform 0.05s !important;
+        }
+
+        /* Instant hover states */
+        .instant-hover {
+            transition: all 0.05s cubic-bezier(0.2, 0, 0, 1) !important;
+        }
+
+        /* Smooth parallax for 240Hz feel */
+        .parallax-bg {
+            transform: translateZ(0);
+            will-change: transform;
+        }
+
+        /* Enhanced cursor tracking */
+        .cursor-highlight {
+            position: fixed;
+            width: 20px;
+            height: 20px;
+            background: radial-gradient(circle, rgba(34, 197, 94, 0.1) 0%, transparent 70%);
+            border-radius: 50%;
+            pointer-events: none;
+            z-index: 9999;
+            transform: translate(-50%, -50%);
+            transition: transform 0.05s cubic-bezier(0.2, 0, 0, 1);
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden selection:bg-brand-100 selection:text-brand-900">
+
+    <!-- Enhanced cursor effect -->
+    <div id="cursorHighlight" class="cursor-highlight"></div>
+
+    <div class="bg-shape shape-1"></div>
+    <div class="bg-shape shape-2"></div>
+    <div class="bg-shape shape-3"></div>
+    <div class="fixed inset-0 grid-bg pointer-events-none z-[-1] parallax-bg"></div>
+
+    <!-- Dynamic Navigation -->
+    <nav id="mainNav" class="fixed w-full z-50 top-0 left-0 border-b border-white/50 backdrop-blur-md transition-colors duration-150">
+        <div class="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+            <div id="navLogo" class="font-bold text-xl tracking-tighter flex items-center gap-2 transition-colors duration-150">
+                <div class="logo-dot w-3 h-3 bg-black rounded-full transition-colors duration-150"></div>
+                ScaleAI
+            </div>
+            <button id="navButton" class="nav-button instant-hover text-sm font-medium bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-all duration-150">
+                Get Started
+            </button>
+        </div>
+    </nav>
+
+    <!-- Back to Top Button - Bottom Left -->
+    <div id="backToTop" class="back-to-top">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
+        </svg>
+    </div>
+
+    <section class="relative pt-32 pb-20 px-6 max-w-6xl mx-auto text-center reveal">
+        
+        <h1 class="text-5xl md:text-7xl font-extrabold tracking-tight text-slate-900 mb-6 leading-[1.1]">
+            Turn your knowledge into <br>
+            <span class="text-transparent bg-clip-text bg-gradient-to-r from-gray-900 via-gray-600 to-gray-900">an automated empire.</span>
+        </h1>
+
+        <p class="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto mb-10 leading-relaxed">
+            We build the AI infrastructure that allows personal educators to remove themselves from operations and focus entirely on content creation.
+        </p>
+
+        <div class="flex flex-col sm:flex-row justify-center gap-4 mb-16">
+            <button class="btn-hover-effect bg-slate-900 text-white px-8 py-4 rounded-full font-medium text-lg flex items-center justify-center gap-2">
+                Scale My Business
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+            <button class="btn-hover-effect px-8 py-4 rounded-full font-medium text-slate-600 border border-gray-200 hover:bg-gray-50 hover:border-gray-300 transition-all bg-white/80 backdrop-blur">
+                View Demo
+            </button>
+        </div>
+
+        <div class="relative rounded-2xl border border-gray-200 shadow-2xl overflow-hidden bg-white mx-auto max-w-5xl reveal">
+            <div class="h-8 bg-gray-50 border-b border-gray-100 flex items-center px-4 gap-2">
+                <div class="w-3 h-3 rounded-full bg-red-400 opacity-50"></div>
+                <div class="w-3 h-3 rounded-full bg-yellow-400 opacity-50"></div>
+                <div class="w-3 h-3 rounded-full bg-green-400 opacity-50"></div>
+            </div>
+            <div class="p-8 grid grid-cols-1 md:grid-cols-3 gap-6 bg-white">
+                <div class="col-span-2 space-y-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="font-bold text-xl">Dashboard</h3>
+                        <span class="text-xs font-mono bg-green-100 text-green-700 px-2 py-1 rounded">Live Data</span>
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <p class="text-xs text-gray-500 mb-1">Students Active</p>
+                            <p class="text-3xl font-bold" id="studentCount">4,860</p>
+                            <div class="w-full bg-gray-200 h-1 mt-2 rounded-full overflow-hidden">
+                                <div class="bg-black h-1 rounded-full progress-animation" style="--target-width: 70%"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 bg-gray-50 rounded-xl border border-gray-100">
+                            <p class="text-xs text-gray-500 mb-1">Revenue (MoM)</p>
+                            <p class="text-3xl font-bold" id="revenueAmount">+$12.4k</p>
+                            <div class="w-full bg-gray-200 h-1 mt-2 rounded-full overflow-hidden">
+                                <div class="bg-green-500 h-1 rounded-full progress-animation" style="--target-width: 40%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-4 bg-slate-900 text-white rounded-xl flex items-center justify-between">
+                        <div>
+                            <p class="text-sm text-gray-400">AI Recommendation</p>
+                            <p class="font-medium">Launch "Cohort 5" email sequence now.</p>
+                        </div>
+                        <button class="btn-hover-effect bg-white text-black text-xs px-3 py-1 rounded hover:bg-gray-200">Execute</button>
+                    </div>
+                </div>
+                <div class="col-span-1 bg-gray-50 rounded-xl border border-gray-100 p-4 flex flex-col justify-center items-center text-center">
+                    <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center shadow-sm mb-4">
+                        <svg class="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                    </div>
+                    <p class="font-bold">System Healthy</p>
+                    <p class="text-xs text-gray-500 mt-2">All automations running optimally.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-10 border-y border-gray-100 bg-white/50 backdrop-blur-sm reveal">
+        <div class="max-w-6xl mx-auto px-6 text-center">
+            <p class="text-xs font-mono uppercase text-gray-400 mb-8 tracking-widest">Trusted by 100+ Educators</p>
+            <div class="flex flex-wrap justify-center items-center gap-16">
+                <div class="logo-item flex items-center gap-2 cursor-pointer">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2L2 7l10 5 10-5-10-5zm0 9l2.5-1.25L12 8.5l-2.5 1.25L12 11zm0 2.5l-5-2.5-5 2.5L12 22l10-8.5-5-2.5-5 2.5z"/></svg>
+                    <span class="font-bold text-xl tracking-tight">AcmeEdu</span>
+                </div>
+                <div class="logo-item flex items-center gap-2 cursor-pointer">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="10" /><path d="M14.31 8l5.74 9.94M9.69 8h11.48M7.38 12l5.74-9.94M9.69 16L3.95 6.06M14.31 16H2.83M16.62 12l-5.74 9.94" stroke="white" stroke-width="2"/></svg>
+                    <span class="font-bold text-xl tracking-tight">Orbit</span>
+                </div>
+                <div class="logo-item flex items-center gap-2 cursor-pointer">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M21 16.5C21 16.88 20.79 17.21 20.47 17.38L12.57 21.82C12.41 21.94 12.21 22 12 22C11.79 22 11.59 21.94 11.43 21.82L3.53 17.38C3.21 17.21 3 16.88 3 16.5V7.5C3 7.12 3.21 6.79 3.53 6.62L11.43 2.18C11.59 2.06 11.79 2 12 2C12.21 2 12.41 2.06 12.57 2.18L20.47 6.62C20.79 6.79 21 7.12 21 7.5V16.5Z"/></svg>
+                    <span class="font-bold text-xl tracking-tight">BlockSystem</span>
+                </div>
+                <div class="logo-item flex items-center gap-2 cursor-pointer">
+                    <svg class="w-8 h-8" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM11 17H7V15H11V17ZM17 17H13V15H17V17ZM17 13H7V11H17V13ZM17 9H7V7H17V9Z"/></svg>
+                    <span class="font-bold text-xl tracking-tight">Frame.io</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 max-w-6xl mx-auto px-6 reveal">
+        <div class="mb-16 max-w-4xl">
+            <h2 class="text-4xl font-bold tracking-tight mb-4">Engineered for growth.</h2>
+            <p class="text-gray-600 text-lg">A complete operating system for your education business. Replace 3 employees with 1 intelligent system.</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div class="feature-card col-span-1 md:col-span-2 row-span-2 bg-white rounded-2xl border border-gray-200 p-6 shadow-sm flex flex-col justify-between overflow-hidden relative group">
+                <div class="z-10">
+                    <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mb-3 border border-gray-100">
+                        <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2">24/7 AI Student Support</h3>
+                    <p class="text-gray-500 text-sm mb-4">Clone yourself. Our AI learns your teaching style and answers student questions instantly via Slack, Discord, or Email.</p>
+                </div>
+                <div class="absolute right-0 bottom-0 w-1/2 h-1/2 bg-gradient-to-tl from-brand-50 to-transparent z-0"></div>
+                
+                <!-- SMOOTH AI EXAMPLE BUBBLE -->
+                <div class="ai-example-bubble rounded-lg p-4 mt-4 relative overflow-hidden">
+                    <div class="relative z-10">
+                        <div class="flex items-start gap-2 mb-2">
+                            <div class="w-6 h-6 rounded-full bg-blue-100 flex items-center justify-center flex-shrink-0 mt-0.5">
+                                <svg class="w-3 h-3 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>
+                            </div>
+                            <div class="flex-1">
+                                <p class="text-gray-700 font-medium text-xs">Student:</p>
+                                <p class="text-gray-600 text-xs mb-2">"How do I fix the useEffect dependency issue?"</p>
+                                
+                                <p class="text-emerald-700 font-medium text-xs">AI Tutor:</p>
+                                <p class="text-emerald-600 text-xs">"Add 'props.reset' to dependency array. Here's the fix..."</p>
+                                
+                                <div class="font-mono text-xs bg-gray-900 text-emerald-300 p-2 rounded mt-2 border border-emerald-900/20">
+                                    <span class="text-blue-400">useEffect</span>(() => {<br>
+                                    &nbsp;&nbsp;<span class="text-pink-400">if</span> (props.reset) {<br>
+                                    &nbsp;&nbsp;&nbsp;&nbsp;setCount(0);<br>
+                                    &nbsp;&nbsp;}<br>
+                                    }, [props.reset]);
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="feature-card bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mb-4 border border-gray-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Content Repurposing</h3>
+                <p class="text-sm text-gray-500">Turn one Zoom call into 10 Tweets, 3 LinkedIn posts, and a Newsletter automatically.</p>
+            </div>
+
+            <div class="feature-card bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mb-4 border border-gray-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Funnel Analytics</h3>
+                <p class="text-sm text-gray-500">Unified dashboard. See exactly where leads drop off and let AI suggest fixes.</p>
+            </div>
+
+            <div class="feature-card bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mb-4 border border-gray-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 3.055A9.001 9.001 0 1020.945 13H11V3.055z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.488 9H15V3.512A9.025 9.025 0 0120.488 9z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Lead Scoring</h3>
+                <p class="text-sm text-gray-500">Focus on the top 10% of buyers. Our system qualifies leads before you ever speak to them.</p>
+            </div>
+
+            <div class="feature-card bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mb-4 border border-gray-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Automated Onboarding</h3>
+                <p class="text-sm text-gray-500">Zero-touch student onboarding. Contracts, payments, and access granting happen in seconds.</p>
+            </div>
+
+            <div class="feature-card bg-white rounded-2xl border border-gray-200 p-6 shadow-sm">
+                <div class="w-10 h-10 bg-gray-50 rounded-lg flex items-center justify-center mb-4 border border-gray-100">
+                    <svg class="w-5 h-5 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                </div>
+                <h3 class="text-lg font-bold mb-2">Smart Scheduling</h3>
+                <p class="text-sm text-gray-500">AI manages your calendar. It books mentorship calls only when you're free and energetic.</p>
+            </div>
+        </div>
+    </section>
+
+    <section id="calculatorSection" class="py-20 bg-slate-900 text-white relative overflow-hidden reveal">
+        <div class="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20"></div>
+        <div class="max-w-4xl mx-auto px-6 relative z-10 text-center">
+            <h2 class="text-3xl font-bold mb-4">Calculate Your Opportunity Cost</h2>
+            <p class="text-gray-400 mb-12">How much money are you leaving on the table by doing manual work?</p>
+
+            <div class="bg-white/10 backdrop-blur-md border border-white/20 rounded-2xl p-8 max-w-2xl mx-auto shadow-2xl">
+                <div class="mb-10 text-left">
+                    <label class="text-sm font-mono text-gray-400 block mb-4">CURRENT MONTHLY REVENUE</label>
+                    <div class="relative w-full h-12 flex items-center">
+                        <input type="range" min="5000" max="100000" step="1000" value="20000" class="w-full z-20 focus:outline-none" id="revenueRange">
+                    </div>
+                    
+                    <div class="flex justify-between mt-2">
+                        <span class="font-mono text-xl text-gray-400">$5k</span>
+                        <span class="font-mono text-3xl font-bold text-brand-500" id="currentVal">$20,000</span>
+                        <span class="font-mono text-xl text-gray-400">$100k</span>
+                    </div>
+                </div>
+
+                <hr class="border-white/10 mb-8">
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 text-left">
+                    <div>
+                        <p class="text-sm text-gray-400 mb-1">Projected Annual Revenue with AI</p>
+                        <p class="text-4xl font-bold text-white" id="projectedVal">$312,000</p>
+                        <p class="text-xs text-green-400 mt-1 flex items-center gap-1">
+                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path d="M12 7l-5 5h10l-5-5z"/></svg>
+                            +30% Efficiency Gain
+                        </p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400 mb-1">Recovered Hours / Year</p>
+                        <p class="text-4xl font-bold text-white">480 hrs</p>
+                        <p class="text-xs text-gray-500 mt-1">Based on 10hrs/week automation</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 max-w-6xl mx-auto px-6 reveal" id="proof-section">
+        <div class="flex justify-between items-end mb-12">
+            <div>
+                <h2 class="text-3xl font-bold tracking-tight">The Proof</h2>
+                <p class="text-gray-500 mt-2">Join the top 1% of educators scaling effortlessly.</p>
+            </div>
+            <div class="flex gap-2">
+                <button class="btn-hover-effect w-10 h-10 rounded-full border border-gray-200 flex items-center justify-center hover:bg-gray-50 transition-colors" id="prevReview">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+                    </svg>
+                </button>
+                <button class="btn-hover-effect w-10 h-10 rounded-full border border-black bg-black text-white flex items-center justify-center hover:bg-gray-800 transition-colors" id="nextReview">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+
+        <!-- FIXED REVIEW CAROUSEL -->
+        <div class="review-carousel-container">
+            <div id="reviewCarouselTrack" class="review-carousel-track">
+                <!-- Slides will be injected by JavaScript -->
+            </div>
+        </div>
+        
+        <div class="flex justify-center gap-2 mt-8" id="reviewIndicators">
+            <!-- Indicators will be injected by JavaScript -->
+        </div>
+        
+        <!-- Auto-advance progress indicator -->
+        <div class="mt-6 flex justify-center">
+            <div class="w-32 h-1 bg-gray-200 rounded-full overflow-hidden">
+                <div id="autoAdvanceProgress" class="h-full bg-black rounded-full transition-all duration-4000 ease-linear"></div>
+            </div>
+        </div>
+    </section>
+
+    <section class="py-24 px-6 reveal">
+        <div class="max-w-4xl mx-auto bg-gradient-to-br from-slate-900 to-slate-800 rounded-3xl p-12 text-center text-white relative overflow-hidden">
+            <div class="absolute top-0 right-0 w-64 h-64 bg-brand-500 rounded-full blur-[100px] opacity-20"></div>
+            
+            <h2 class="text-4xl md:text-5xl font-bold tracking-tight mb-6 relative z-10">Ready to remove yourself<br>from the operations?</h2>
+            <p class="text-gray-300 mb-10 text-lg relative z-10">Book a free strategy audit. We'll show you exactly where AI can save you 20+ hours next week.</p>
+            
+            <button class="btn-hover-effect relative z-10 bg-white text-slate-900 px-10 py-4 rounded-full font-bold text-lg hover:bg-brand-50 transition-colors">
+                Book My Audit
+            </button>
+            <p class="mt-4 text-xs text-gray-500 font-mono relative z-10">No credit card required • 3 spots left this week</p>
+        </div>
+    </section>
+
+    <footer class="border-t border-gray-100 py-12 text-center text-gray-400 text-sm">
+        <p>&copy; 2025 ScaleAI Systems. All rights reserved.</p>
+    </footer>
+
+    <elevenlabs-convai agent-id="agent_5301kckfxpq4e4gv9rg61acysb3g"></elevenlabs-convai>
+    <script src="https://unpkg.com/@elevenlabs/convai-widget-embed" async type="text/javascript"></script>
+
+    <script>
+        // 240Hz OPTIMIZATION: Use requestAnimationFrame for smooth animations
+        let lastScrollTime = 0;
+        const scrollInterval = 1000 / 240; // Target 240Hz
+
+        // Enhanced cursor effect
+        const cursorHighlight = document.getElementById('cursorHighlight');
+        let mouseX = 0, mouseY = 0;
+        let cursorX = 0, cursorY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+            mouseX = e.clientX;
+            mouseY = e.clientY;
+        });
+
+        function updateCursor() {
+            // Smooth cursor follow with 240Hz-like interpolation
+            cursorX += (mouseX - cursorX) * 0.3;
+            cursorY += (mouseY - cursorY) * 0.3;
+            
+            cursorHighlight.style.transform = `translate(${cursorX}px, ${cursorY}px)`;
+            requestAnimationFrame(updateCursor);
+        }
+
+        updateCursor();
+
+        // 1. SCROLL REVEAL LOGIC - Optimized
+        const revealElements = document.querySelectorAll('.reveal');
+        const revealObserver = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if(entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                }
+            });
+        }, { threshold: 0.05, rootMargin: '50px' });
+
+        revealElements.forEach(el => revealObserver.observe(el));
+
+        // 2. CALCULATOR LOGIC
+        const slider = document.getElementById('revenueRange');
+        const currentDisplay = document.getElementById('currentVal');
+        const projectedDisplay = document.getElementById('projectedVal');
+
+        slider.addEventListener('input', (e) => {
+            const val = parseInt(e.target.value);
+            currentDisplay.textContent = '$' + val.toLocaleString();
+            const annual = val * 12;
+            const projected = annual * 1.3;
+            projectedDisplay.textContent = '$' + Math.floor(projected).toLocaleString();
+        });
+
+        // 3. INCREMENTAL DASHBOARD ANIMATIONS - Optimized with rAF
+        let studentCount = 4860;
+        let revenueAmount = 12400;
+        let animationActive = false;
+        const studentDisplay = document.getElementById('studentCount');
+        const revenueDisplay = document.getElementById('revenueAmount');
+        
+        function animateValue(element, start, end, duration = 800) {
+            const startTime = performance.now();
+            const difference = end - start;
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                const easedProgress = 1 - Math.pow(1 - progress, 3); // Cubic ease-out
+                const currentValue = Math.floor(start + (difference * easedProgress));
+                
+                element.textContent = element === studentDisplay ? 
+                    currentValue.toLocaleString() : 
+                    '+$' + (currentValue / 1000).toFixed(1) + 'k';
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        function startContinuousDashboardAnimation() {
+            if (animationActive) return;
+            animationActive = true;
+            
+            function updateDashboard() {
+                const studentIncrease = Math.floor(Math.random() * 5) + 1;
+                const revenueIncrease = Math.floor(Math.random() * 81) + 40;
+                
+                const newStudentCount = studentCount + studentIncrease;
+                const newRevenueAmount = revenueAmount + revenueIncrease;
+                
+                animateValue(studentDisplay, studentCount, newStudentCount, 800);
+                animateValue(revenueDisplay, revenueAmount, newRevenueAmount, 800);
+                
+                studentCount = newStudentCount;
+                revenueAmount = newRevenueAmount;
+                
+                setTimeout(updateDashboard, Math.random() * 2000 + 3000);
+            }
+            
+            setTimeout(updateDashboard, 1500);
+        }
+
+        const dashboardObserver = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    setTimeout(startContinuousDashboardAnimation, 800);
+                    dashboardObserver.unobserve(entry.target);
+                }
+            });
+        }, { threshold: 0.3 });
+
+        const dashboardSection = document.querySelector('.relative.rounded-2xl.border.border-gray-200');
+        if (dashboardSection) dashboardObserver.observe(dashboardSection);
+
+        // 4. DYNAMIC NAVIGATION COLOR CHANGE
+        const mainNav = document.getElementById('mainNav');
+        const navLogo = document.getElementById('navLogo');
+        const navButton = document.getElementById('navButton');
+        const calculatorSection = document.getElementById('calculatorSection');
+
+        function updateNavColors() {
+            const calculatorRect = calculatorSection.getBoundingClientRect();
+            const isInCalculator = calculatorRect.top <= 100 && calculatorRect.bottom >= 100;
+            
+            if (isInCalculator) {
+                navLogo.classList.add('nav-in-calculator');
+                navButton.classList.add('nav-in-calculator');
+                mainNav.style.borderColor = 'rgba(255,255,255,0.2)';
+            } else {
+                navLogo.classList.remove('nav-in-calculator');
+                navButton.classList.remove('nav-in-calculator');
+                mainNav.style.borderColor = 'rgba(255,255,255,0.5)';
+            }
+        }
+
+        // Optimized scroll handler
+        let ticking = false;
+        window.addEventListener('scroll', () => {
+            if (!ticking) {
+                requestAnimationFrame(() => {
+                    updateNavColors();
+                    ticking = false;
+                });
+                ticking = true;
+            }
+        });
+
+        // 5. BACK TO TOP BUTTON
+        const backToTopBtn = document.getElementById('backToTop');
+        
+        function toggleBackToTop() {
+            if (window.scrollY > 300) {
+                backToTopBtn.classList.add('visible');
+            } else {
+                backToTopBtn.classList.remove('visible');
+            }
+        }
+        
+        backToTopBtn.addEventListener('click', () => {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        
+        window.addEventListener('scroll', toggleBackToTop);
+
+        // 6. FIXED REVIEWS CAROUSEL WITH 240Hz OPTIMIZATIONS
+        const reviews = [
+            {
+                id: 1,
+                name: "Theresa Webb",
+                role: "Design Educator",
+                avatar: "https://i.pravatar.cc/150?img=1",
+                title: "Fantastic Collaboration",
+                content: "The attention to detail and responsiveness makes this system our go-to choice. We scaled from $10k to $50k in 3 months.",
+                rating: "★★★★★"
+            },
+            {
+                id: 2,
+                name: "Cody Fisher",
+                role: "Crypto Mentor",
+                avatar: "https://i.pravatar.cc/150?img=11",
+                title: "Automated Everything",
+                content: "I used to spend 4 hours a day answering emails. Now the AI does it. I just record videos and sleep.",
+                rating: "★★★★★"
+            },
+            {
+                id: 3,
+                name: "Esther Howard",
+                role: "Marketing Coach",
+                avatar: "https://i.pravatar.cc/150?img=5",
+                title: "Pure Brilliance",
+                content: "Their website design and system architecture is the secret sauce for our online success. Stunning visuals.",
+                rating: "★★★★★"
+            },
+            {
+                id: 4,
+                name: "Marcus Reed",
+                role: "Sales Trainer",
+                avatar: "https://i.pravatar.cc/150?img=8",
+                title: "Revenue Doubled",
+                content: "I was skeptical about AI, but the lead scoring feature alone paid for the entire setup in week one.",
+                rating: "★★★★★"
+            },
+            {
+                id: 5,
+                name: "Sarah Jenkins",
+                role: "Fitness Coach",
+                avatar: "https://i.pravatar.cc/150?img=9",
+                title: "Time Saver",
+                content: "The automated onboarding flow is a lifesaver. No more manual contract sending. It just works.",
+                rating: "★★★★★"
+            },
+            {
+                id: 6,
+                name: "David Chen",
+                role: "Coding Bootcamp",
+                avatar: "https://i.pravatar.cc/150?img=12",
+                title: "Highly Recommended",
+                content: "The support team helped me integrate this with my existing Teachable setup perfectly. Seamless.",
+                rating: "★★★★★"
+            },
+            {
+                id: 7,
+                name: "Emily R.",
+                role: "Life Coach",
+                avatar: "https://i.pravatar.cc/150?img=15",
+                title: "Game Changer",
+                content: "ScaleAI gave me my life back. I'm spending more time with my family while the business grows.",
+                rating: "★★★★★"
+            },
+            {
+                id: 8,
+                name: "Michael T.",
+                role: "Business Strategist",
+                avatar: "https://i.pravatar.cc/150?img=20",
+                title: "Seamless Tech",
+                content: "The repurposing tool is magic. One video becomes a whole week of content. Absolutely genius.",
+                rating: "★★★★★"
+            },
+            {
+                id: 9,
+                name: "Jessica P.",
+                role: "Yoga Instructor",
+                avatar: "https://i.pravatar.cc/150?img=33",
+                title: "Best Investment",
+                content: "If you are thinking about it, just do it. The ROI was positive within the first 14 days.",
+                rating: "★★★★★"
+            }
+        ];
+
+        let currentReviewSet = 0;
+        const reviewsPerSet = 3;
+        const totalReviewSets = Math.ceil(reviews.length / reviewsPerSet);
+        const reviewCarouselTrack = document.getElementById('reviewCarouselTrack');
+        const reviewIndicators = document.getElementById('reviewIndicators');
+        const prevButton = document.getElementById('prevReview');
+        const nextButton = document.getElementById('nextReview');
+        const autoAdvanceProgress = document.getElementById('autoAdvanceProgress');
+        let autoAdvanceInterval;
+
+        function renderReviewSlide(slideIndex) {
+            const slide = document.createElement('div');
+            slide.className = 'review-carousel-slide gpu-accelerated';
+            
+            const startIndex = slideIndex * reviewsPerSet;
+            const endIndex = startIndex + reviewsPerSet;
+            const slideReviews = reviews.slice(startIndex, endIndex);
+            
+            slideReviews.forEach(review => {
+                const reviewCard = document.createElement('div');
+                reviewCard.className = 'review-card gpu-accelerated';
+                
+                reviewCard.innerHTML = `
+                    <div class="flex text-yellow-400 mb-3">${review.rating}</div>
+                    <h4 class="font-bold text-lg mb-2">${review.title}</h4>
+                    <p class="text-gray-600 text-sm mb-6 leading-relaxed flex-grow">"${review.content}"</p>
+                    <div class="flex items-center gap-3 mt-auto">
+                        <div class="w-10 h-10 bg-gray-200 rounded-full bg-cover" style="background-image: url('${review.avatar}')"></div>
+                        <div>
+                            <p class="font-bold text-sm">${review.name}</p>
+                            <p class="text-xs text-gray-400">${review.role}</p>
+                        </div>
+                    </div>
+                `;
+                
+                slide.appendChild(reviewCard);
+            });
+            
+            return slide;
+        }
+
+        function renderCarousel() {
+            reviewCarouselTrack.innerHTML = '';
+            
+            for (let i = 0; i < totalReviewSets; i++) {
+                const slide = renderReviewSlide(i);
+                reviewCarouselTrack.appendChild(slide);
+            }
+            
+            updateCarouselPosition();
+        }
+
+        function updateCarouselPosition() {
+            const translateX = -currentReviewSet * 100;
+            reviewCarouselTrack.style.transform = `translateX(${translateX}%)`;
+            updateIndicators();
+            updateButtonStates();
+            resetAutoAdvanceProgress();
+        }
+
+        function updateIndicators() {
+            reviewIndicators.innerHTML = '';
+            
+            for (let i = 0; i < totalReviewSets; i++) {
+                const indicator = document.createElement('button');
+                indicator.className = `instant-hover w-3 h-3 rounded-full ${i === currentReviewSet ? 'bg-black' : 'bg-gray-300'}`;
+                indicator.addEventListener('click', () => {
+                    if (i !== currentReviewSet) {
+                        currentReviewSet = i;
+                        updateCarouselPosition();
+                    }
+                });
+                reviewIndicators.appendChild(indicator);
+            }
+        }
+
+        function updateButtonStates() {
+            prevButton.disabled = currentReviewSet === 0;
+            nextButton.disabled = currentReviewSet === totalReviewSets - 1;
+        }
+
+        function resetAutoAdvanceProgress() {
+            autoAdvanceProgress.style.transition = 'none';
+            autoAdvanceProgress.style.width = '0%';
+            void autoAdvanceProgress.offsetWidth;
+            autoAdvanceProgress.style.transition = 'width 4s linear';
+            autoAdvanceProgress.style.width = '100%';
+        }
+
+        function startAutoAdvance() {
+            clearInterval(autoAdvanceInterval);
+            
+            autoAdvanceInterval = setInterval(() => {
+                if (currentReviewSet < totalReviewSets - 1) {
+                    currentReviewSet++;
+                } else {
+                    currentReviewSet = 0;
+                }
+                updateCarouselPosition();
+            }, 4000);
+        }
+
+        // Event listeners with instant feedback
+        prevButton.addEventListener('click', () => {
+            if (currentReviewSet > 0) {
+                currentReviewSet--;
+                updateCarouselPosition();
+            }
+        });
+
+        nextButton.addEventListener('click', () => {
+            if (currentReviewSet < totalReviewSets - 1) {
+                currentReviewSet++;
+                updateCarouselPosition();
+            }
+        });
+
+        // Pause auto-advance on hover
+        const carouselContainer = document.querySelector('.review-carousel-container');
+        carouselContainer.addEventListener('mouseenter', () => {
+            clearInterval(autoAdvanceInterval);
+            autoAdvanceProgress.style.transition = 'none';
+            autoAdvanceProgress.style.width = autoAdvanceProgress.style.width;
+        });
+
+        carouselContainer.addEventListener('mouseleave', () => {
+            startAutoAdvance();
+        });
+
+        // Initialize everything
+        renderCarousel();
+        startAutoAdvance();
+        toggleBackToTop();
+        updateNavColors();
+
+        // 240Hz Optimization: Preload critical animations
+        window.addEventListener('load', () => {
+            // Force hardware acceleration
+            document.querySelectorAll('.gpu-accelerated').forEach(el => {
+                el.style.transform = 'translateZ(0)';
+            });
+        });
+    </script>
+</body>
+</html>

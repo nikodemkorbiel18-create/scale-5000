@@ -1,0 +1,9 @@
+The main page of ScaleAI introduces an AI-powered system for scaling education businesses.
+
+It features a high-impact hero section explaining how educators can automate operations and grow revenue using AI. Visitors can explore a live-style dashboard preview showing student activity, revenue growth, and AI recommendations.
+
+The page highlights core features such as AI student support, content repurposing, lead scoring, automated onboarding, funnel analytics, and smart scheduling.
+
+An interactive calculator allows users to estimate lost revenue and time caused by manual work. Social proof is provided through testimonials from educators across different industries.
+
+The page concludes with a strong call to action encouraging visitors to book a strategy audit to identify automation opportunities using AI.

@@ -1,0 +1,40 @@
+{
+  "name": "ScaleAI Systems",
+  "title": "Scale Your Education Business with AI",
+  "description": "An AI-powered operating system that helps educators automate student support, onboarding, analytics, and content workflows to scale their education businesses.",
+  "type": "AI-powered web application",
+  "primary_audience": [
+    "Online educators",
+    "Course creators",
+    "Coaches",
+    "Mentors",
+    "Education businesses"
+  ],
+  "core_features": [
+    "24/7 AI student support",
+    "Automated onboarding",
+    "Content repurposing",
+    "Lead scoring",
+    "Funnel analytics",
+    "Smart scheduling",
+    "Revenue and growth calculator"
+  ],
+  "deployment_platform": "Vercel",
+  "frontend_stack": [
+    "HTML",
+    "Tailwind CSS",
+    "Vanilla JavaScript"
+  ],
+  "ai_capabilities": [
+    "AI-powered student Q&A",
+    "AI recommendations",
+    "Automation of business workflows",
+    "Predictive analytics and insights"
+  ],
+  "branding": {
+    "product_name": "ScaleAI",
+    "company": "ScaleAI Systems",
+    "year": "2025"
+  },
+  "status": "Production-ready landing and demo interface"
+}
