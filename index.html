@@ -246,13 +246,26 @@
         .nav-in-calculator .logo-dot {
             background-color: white !important;
         }
+        .nav-in-calculator a,
         .nav-in-calculator button {
             background-color: white !important;
             color: black !important;
             border: 1px solid rgba(255,255,255,0.2) !important;
         }
+        .nav-in-calculator a:hover,
         .nav-in-calculator button:hover {
             background-color: #f3f4f6 !important;
+        }
+
+        /* Sign In link turns white in calculator */
+        #navSignIn.nav-in-calculator {
+            color: white !important;
+            background-color: transparent !important;
+            border: none !important;
+        }
+        #navSignIn.nav-in-calculator:hover {
+            color: #f3f4f6 !important;
+            background-color: transparent !important;
         }
 
         /* Back to Top Button - BOTTOM LEFT */
@@ -470,8 +483,8 @@
                 ScaleAI
             </div>
             <div class="flex items-center gap-3">
-                <a href="login.html" class="text-sm font-medium text-gray-700 hover:text-black transition-colors">Sign In</a>
-                <a href="signup.html" class="nav-button instant-hover text-sm font-medium bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-all duration-150">Get Started</a>
+                <a href="login.html" id="navSignIn" class="text-sm font-medium text-gray-700 hover:text-black transition-colors">Sign In</a>
+                <a href="signup.html" id="navButton" class="nav-button instant-hover text-sm font-medium bg-black text-white px-5 py-2 rounded-full hover:bg-gray-800 transition-all duration-150">Get Started</a>
             </div>
         </div>
     </nav>
@@ -1159,7 +1172,7 @@
             <button onclick="openBookingModal()" class="btn-hover-effect relative z-10 bg-white text-slate-900 px-10 py-4 rounded-full font-bold text-lg hover:bg-brand-50 transition-colors">
                 Book Your Free Audit
             </button>
-            <p class="mt-4 text-xs text-gray-500 font-mono relative z-10">Starting at $997/month · 3 spots available this week</p>
+            <p class="mt-4 text-xs text-gray-500 font-mono relative z-10">Starting at $497/month · 3 spots available this week</p>
         </div>
     </section>
 
@@ -1566,19 +1579,24 @@
         const mainNav = document.getElementById('mainNav');
         const navLogo = document.getElementById('navLogo');
         const navButton = document.getElementById('navButton');
+        const navSignIn = document.getElementById('navSignIn');
         const calculatorSection = document.getElementById('calculatorSection');
 
         function updateNavColors() {
+            if (!calculatorSection) return; // Guard clause
+
             const calculatorRect = calculatorSection.getBoundingClientRect();
             const isInCalculator = calculatorRect.top <= 100 && calculatorRect.bottom >= 100;
-            
+
             if (isInCalculator) {
                 navLogo.classList.add('nav-in-calculator');
-                navButton.classList.add('nav-in-calculator');
+                if (navButton) navButton.classList.add('nav-in-calculator');
+                if (navSignIn) navSignIn.classList.add('nav-in-calculator');
                 mainNav.style.borderColor = 'rgba(255,255,255,0.2)';
             } else {
                 navLogo.classList.remove('nav-in-calculator');
-                navButton.classList.remove('nav-in-calculator');
+                if (navButton) navButton.classList.remove('nav-in-calculator');
+                if (navSignIn) navSignIn.classList.remove('nav-in-calculator');
                 mainNav.style.borderColor = 'rgba(255,255,255,0.5)';
             }
         }
