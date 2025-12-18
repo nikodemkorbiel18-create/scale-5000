@@ -12,7 +12,8 @@
       "Bash(vercel login)",
       "Bash(vercel:*)",
       "Bash(npm init:*)",
-      "Bash(npm install:*)"
+      "Bash(npm install:*)",
+      "Bash(npm start)"
     ]
   }
 }
