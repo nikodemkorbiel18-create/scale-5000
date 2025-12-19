@@ -1,4 +1,8 @@
-require('dotenv').config();
+// Only load .env in development (Vercel injects env vars directly)
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
@@ -7,7 +11,19 @@ const OpenAI = require('openai');
 const path = require('path');
 
 const app = express();
-const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+
+// Lazy-load OpenAI client (initialize when needed, not at module load)
+let openaiClient = null;
+function getOpenAI() {
+  if (!openaiClient) {
+    const apiKey = process.env.OPENAI_API_KEY;
+    if (!apiKey) {
+      throw new Error('OPENAI_API_KEY environment variable is not set');
+    }
+    openaiClient = new OpenAI({ apiKey });
+  }
+  return openaiClient;
+}
 
 // Initialize database tables (run once, or use separate migration script)
 async function initDatabase() {
@@ -166,6 +182,7 @@ app.post('/api/audit', requireAuth, async (req, res) => {
   }
 
   try {
+    const openai = getOpenAI(); // Initialize OpenAI client when needed
     const completion = await openai.chat.completions.create({
       model: 'gpt-4o-mini',
       messages: [{
