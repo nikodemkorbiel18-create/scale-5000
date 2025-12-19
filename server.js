@@ -297,8 +297,14 @@ app.get('/dashboard.html', (req, res) => {
   res.sendFile(path.join(__dirname, 'dashboard.html'));
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`ScaleAI MVP running on http://localhost:${PORT}`);
-  console.log(`Database: PostgreSQL (Vercel Postgres)`);
-});
+// Export for Vercel serverless functions
+module.exports = app;
+
+// Only listen when running locally (not on Vercel)
+if (process.env.NODE_ENV !== 'production') {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => {
+    console.log(`ScaleAI MVP running on http://localhost:${PORT}`);
+    console.log(`Database: PostgreSQL (Vercel Postgres)`);
+  });
+}
