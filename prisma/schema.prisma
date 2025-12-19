@@ -1,0 +1,33 @@
+// prisma/schema.prisma
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           Int       @id @default(autoincrement())
+  email        String    @unique
+  passwordHash String    @map("password_hash")
+  createdAt    DateTime  @default(now()) @map("created_at")
+
+  audits       AiAudit[]
+
+  @@map("users")
+}
+
+model AiAudit {
+  id                  Int       @id @default(autoincrement())
+  userId              Int       @map("user_id")
+  user                User      @relation(fields: [userId], references: [id])
+  businessDescription String    @map("business_description")
+  currentRevenue      String?   @map("current_revenue")
+  aiResponse          String    @map("ai_response")
+  createdAt           DateTime  @default(now()) @map("created_at")
+
+  @@map("ai_audits")
+}

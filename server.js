@@ -1,17 +1,17 @@
+// server.js
+
 // Only load .env in development (Vercel injects env vars directly)
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
 
-// ✅ FIX: Force pooled connection for @vercel/postgres (serverless-safe)
-process.env.POSTGRES_URL = process.env.POSTGRES_URL_POOLING;
-
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
-const { sql } = require('@vercel/postgres');
 const OpenAI = require('openai');
 const path = require('path');
+
+const { prisma } = require('./prismaClient');
 
 const app = express();
 
@@ -28,54 +28,26 @@ function getOpenAI() {
   return openaiClient;
 }
 
-// Initialize database tables (run once, or use separate migration script)
-async function initDatabase() {
-  try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `;
-
-    await sql`
-      CREATE TABLE IF NOT EXISTS ai_audits (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER NOT NULL REFERENCES users(id),
-        business_description TEXT NOT NULL,
-        current_revenue TEXT,
-        ai_response TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `;
-
-    console.log('✅ Database tables initialized');
-  } catch (error) {
-    if (!error.message.includes('already exists')) {
-      console.error('Database initialization error:', error);
-    }
-  }
-}
-
-// Call on startup
-initDatabase();
+// NOTE: database schema is now managed by Prisma (prisma/schema.prisma)
+// Run `npx prisma db push` once to create tables.
 
 // Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('.'));
-app.use(session({
-  secret: process.env.SESSION_SECRET || 'fallback-secret-change-in-production',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000
-  }
-}));
+app.use(
+  session({
+    secret:
+      process.env.SESSION_SECRET || 'fallback-secret-change-in-production',
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === 'production', // HTTPS in production
+      httpOnly: true,
+      maxAge: 24 * 60 * 60 * 1000 // 24 hours
+    }
+  })
+);
 
 // Auth middleware
 function requireAuth(req, res, next) {
@@ -96,19 +68,24 @@ app.post('/api/signup', async (req, res) => {
   try {
     const passwordHash = await bcrypt.hash(password, 10);
 
-    const result = await sql`
-      INSERT INTO users (email, password_hash)
-      VALUES (${email}, ${passwordHash})
-      RETURNING id
-    `;
+    const user = await prisma.user.create({
+      data: {
+        email,
+        passwordHash
+      },
+      select: {
+        id: true
+      }
+    });
 
-    const userId = result.rows[0].id;
-    req.session.userId = userId;
-    res.json({ success: true, userId });
+    req.session.userId = user.id;
+    res.json({ success: true, userId: user.id });
   } catch (error) {
     if (
-      error.message.includes('duplicate key') ||
-      error.message.includes('unique constraint')
+      error.code === 'P2002' || // Prisma unique constraint
+      (error.message &&
+        (error.message.includes('duplicate key') ||
+          error.message.includes('unique constraint')))
     ) {
       return res.status(400).json({ error: 'Email already exists' });
     }
@@ -125,18 +102,20 @@ app.post('/api/login', async (req, res) => {
   }
 
   try {
-    const result = await sql`
-      SELECT id, email, password_hash
-      FROM users
-      WHERE email = ${email}
-    `;
+    const user = await prisma.user.findUnique({
+      where: { email },
+      select: {
+        id: true,
+        email: true,
+        passwordHash: true
+      }
+    });
 
-    if (result.rows.length === 0) {
+    if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const user = result.rows[0];
-    const valid = await bcrypt.compare(password, user.password_hash);
+    const valid = await bcrypt.compare(password, user.passwordHash);
 
     if (!valid) {
       return res.status(401).json({ error: 'Invalid credentials' });
@@ -161,17 +140,20 @@ app.get('/api/me', async (req, res) => {
   }
 
   try {
-    const result = await sql`
-      SELECT id, email, created_at
-      FROM users
-      WHERE id = ${req.session.userId}
-    `;
+    const user = await prisma.user.findUnique({
+      where: { id: req.session.userId },
+      select: {
+        id: true,
+        email: true,
+        createdAt: true
+      }
+    });
 
-    if (result.rows.length === 0) {
+    if (!user) {
       return res.status(401).json({ error: 'User not found' });
     }
 
-    res.json(result.rows[0]);
+    res.json(user);
   } catch (error) {
     console.error('Get user error:', error);
     res.status(500).json({ error: 'Server error' });
@@ -198,7 +180,9 @@ app.post('/api/audit', requireAuth, async (req, res) => {
         },
         {
           role: 'user',
-          content: `Business: ${businessDescription}\nCurrent Revenue: ${currentRevenue || 'Not specified'}\n\nProvide a business automation audit.`
+          content: `Business: ${businessDescription}\nCurrent Revenue: ${
+            currentRevenue || 'Not specified'
+          }\n\nProvide a business automation audit.`
         }
       ],
       temperature: 0.7,
@@ -207,16 +191,22 @@ app.post('/api/audit', requireAuth, async (req, res) => {
 
     const aiResponse = completion.choices[0].message.content;
 
-    const result = await sql`
-      INSERT INTO ai_audits (user_id, business_description, current_revenue, ai_response)
-      VALUES (${req.session.userId}, ${businessDescription}, ${currentRevenue || null}, ${aiResponse})
-      RETURNING id
-    `;
+    const audit = await prisma.aiAudit.create({
+      data: {
+        userId: req.session.userId,
+        businessDescription,
+        currentRevenue: currentRevenue || null,
+        aiResponse
+      },
+      select: {
+        id: true
+      }
+    });
 
     res.json({
       success: true,
       audit: aiResponse,
-      auditId: result.rows[0].id
+      auditId: audit.id
     });
   } catch (error) {
     console.error('AI Audit error:', error);
@@ -227,17 +217,96 @@ app.post('/api/audit', requireAuth, async (req, res) => {
 // Get user's audit history
 app.get('/api/audits', requireAuth, async (req, res) => {
   try {
-    const result = await sql`
-      SELECT id, business_description, current_revenue, ai_response, created_at
-      FROM ai_audits
-      WHERE user_id = ${req.session.userId}
-      ORDER BY created_at DESC
-    `;
+    const audits = await prisma.aiAudit.findMany({
+      where: {
+        userId: req.session.userId
+      },
+      orderBy: {
+        createdAt: 'desc'
+      },
+      select: {
+        id: true,
+        businessDescription: true,
+        currentRevenue: true,
+        aiResponse: true,
+        createdAt: true
+      }
+    });
 
-    res.json(result.rows);
+    res.json(audits);
   } catch (error) {
     console.error('Get audits error:', error);
     res.status(500).json({ error: 'Failed to fetch audits' });
+  }
+});
+
+// (Optional) Publish audit to GitHub – left as-is except for DB lookup
+app.post('/api/publish-audit', requireAuth, async (req, res) => {
+  const { auditId, auditContent } = req.body;
+
+  if (!auditId || !auditContent) {
+    return res
+      .status(400)
+      .json({ error: 'Audit ID and content required' });
+  }
+
+  try {
+    const { execSync } = require('child_process');
+    const fs = require('fs');
+
+    const user = await prisma.user.findUnique({
+      where: { id: req.session.userId },
+      select: { email: true }
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    if (!fs.existsSync('audits')) {
+      fs.mkdirSync('audits');
+    }
+
+    const timestamp = new Date().toISOString().replace(/[:.]/g, '-');
+    const filename = `audits/audit-${auditId}-${timestamp}.md`;
+
+    const fileContent = `# AI Business Audit #${auditId}
+Generated: ${new Date().toLocaleString()}
+User: ${user.email}
+
+---
+
+${auditContent}
+
+---
+
+*Generated by ScaleAI Systems - AI Business Automation Platform*
+`;
+
+    fs.writeFileSync(filename, fileContent);
+
+    try {
+      execSync('git add ' + filename, { cwd: __dirname });
+      execSync(`git commit -m "Add AI audit #${auditId} for ${user.email}"`, {
+        cwd: __dirname
+      });
+      execSync('git push origin main', { cwd: __dirname });
+
+      res.json({
+        success: true,
+        message: 'Audit published to GitHub',
+        filename: filename
+      });
+    } catch (gitError) {
+      res.json({
+        success: true,
+        message: 'Audit saved locally (GitHub push may have failed)',
+        filename: filename
+      });
+    }
+  } catch (error) {
+    console.error('Publish audit error:', error);
+    res.status(500).json({ error: 'Failed to publish audit' });
   }
 });
 
@@ -257,7 +326,6 @@ if (process.env.NODE_ENV !== 'production') {
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => {
     console.log(`ScaleAI MVP running on http://localhost:${PORT}`);
-    console.log(`Database: PostgreSQL (Vercel Postgres)`);
+    console.log(`Database: PostgreSQL via Prisma`);
   });
 }
-

@@ -16,7 +16,9 @@
       "Bash(npm start)",
       "Bash(netstat:*)",
       "Bash(findstr:*)",
-      "Bash(timeout 2 bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 0.1; done')"
+      "Bash(timeout 2 bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 0.1; done')",
+      "WebFetch(domain:scaleai-systems.vercel.app)",
+      "Bash(timeout 10 bash -c 'until curl -s https://scaleai-systems.vercel.app > /dev/null; do sleep 0.5; done')"
     ]
   }
 }
