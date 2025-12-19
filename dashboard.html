@@ -1,262 +1,2205 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | ScaleAI Systems</title>
-    <link rel="icon" type="image/svg+xml" href="favicon.svg">
-    <link rel="alternate icon" href="favicon.ico">
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
-    <style>
-        * {
-            -webkit-font-smoothing: antialiased;
-            -moz-osx-font-smoothing: grayscale;
-        }
-        body {
-            font-family: 'Inter', sans-serif;
-            background: #f8fafc;
-        }
-    </style>
+  <meta charset="UTF-8" />
+  <title>ScaleAI Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    :root {
+      --bg: #f5f6f8;
+      --card-bg: #ffffff;
+      --card-soft: #f7f8fb;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --accent: #2563eb;
+      --accent-soft: #e0ecff;
+      --accent-dark: #1d4ed8;
+      --danger: #ef4444;
+      --border-subtle: #e5e7eb;
+      --radius-lg: 18px;
+      --radius-xl: 22px;
+      --shadow-soft: 0 18px 35px rgba(15, 23, 42, 0.07);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text",
+        "SF Pro Display", "Helvetica Neue", Arial, sans-serif;
+    }
+
+    body {
+      background: radial-gradient(circle at top left, #e5f0ff, #f5f6f8 55%);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+    }
+
+    /* Layout */
+    .app-shell {
+      display: flex;
+      width: 100%;
+      max-width: 1320px;
+      margin: 24px auto;
+      padding: 16px;
+      gap: 18px;
+    }
+
+    /* Sidebar (collapsed by default, expands on hover) */
+    .sidebar {
+      position: relative;
+      width: 70px;
+      background: rgba(255, 255, 255, 0.92);
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft);
+      padding: 16px 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+      backdrop-filter: blur(18px);
+      transition: width 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+      overflow: hidden;
+    }
+
+    .sidebar:hover {
+      width: 230px;
+      box-shadow: 0 22px 45px rgba(15, 23, 42, 0.12);
+      transform: translateY(-1px);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 4px 8px;
+    }
+
+    .brand-icon {
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #22c55e, #2563eb);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.1);
+      flex-shrink: 0;
+    }
+
+    .brand-name {
+      font-weight: 650;
+      letter-spacing: 0.02em;
+      font-size: 15px;
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    .sidebar:hover .brand-name {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .sidebar-section-label {
+      font-size: 10px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      letter-spacing: 0.14em;
+      padding: 0 4px;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    .sidebar:hover .sidebar-section-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .nav-list {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-top: 4px;
+    }
+
+    .nav-item {
+      border: none;
+      background: transparent;
+      border-radius: 999px;
+      padding: 7px 10px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      font-size: 13px;
+      color: var(--text-muted);
+      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease,
+        box-shadow 0.18s ease;
+    }
+
+    .nav-item-icon {
+      width: 22px;
+      height: 22px;
+      border-radius: 999px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      background: #eef2ff;
+      color: #4f46e5;
+      font-size: 13px;
+      flex-shrink: 0;
+      transition: background 0.18s ease, color 0.18s ease, transform 0.12s ease;
+    }
+
+    .nav-item-label {
+      white-space: nowrap;
+      opacity: 0;
+      transform: translateX(-4px);
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    .sidebar:hover .nav-item-label {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .nav-item.active {
+      background: #0f172a;
+      color: #f9fafb;
+      transform: translateY(-1px);
+      box-shadow: 0 8px 20px rgba(15, 23, 42, 0.5);
+    }
+
+    .nav-item.active .nav-item-icon {
+      background: radial-gradient(circle at 30% 0, #22c55e, #16a34a);
+      color: #ecfdf5;
+      transform: scale(1.02);
+    }
+
+    .nav-item:hover:not(.active) {
+      background: rgba(148, 163, 184, 0.08);
+      transform: translateY(-0.5px);
+    }
+
+    .nav-item:hover:not(.active) .nav-item-icon {
+      background: #e0ecff;
+      transform: scale(1.02);
+    }
+
+    .sidebar-footer {
+      margin-top: auto;
+      font-size: 11px;
+      color: var(--text-muted);
+      padding: 0 4px;
+      opacity: 0;
+      transform: translateX(-6px);
+      transition: opacity 0.16s ease, transform 0.16s ease;
+    }
+
+    .sidebar:hover .sidebar-footer {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    /* Main */
+    .main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    /* Header */
+    .top-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 4px;
+    }
+
+    .top-title {
+      font-size: 20px;
+      font-weight: 650;
+    }
+
+    .top-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      box-shadow: 0 8px 18px rgba(15, 23, 42, 0.06);
+    }
+
+    .user-avatar {
+      width: 24px;
+      height: 24px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #2563eb);
+    }
+
+    .user-email {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 160px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .logout-btn {
+      border: none;
+      background: transparent;
+      font-size: 12px;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 999px;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+
+    .logout-btn:hover {
+      color: var(--danger);
+      background: #fee2e2;
+    }
+
+    /* Content card */
+    .content-card {
+      background: rgba(255, 255, 255, 0.95);
+      border-radius: 24px;
+      box-shadow: var(--shadow-soft);
+      padding: 18px 18px 20px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      backdrop-filter: blur(18px);
+      animation: card-in 0.3s ease-out;
+    }
+
+    @keyframes card-in {
+      0% {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Sections */
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+      animation: fade-in 0.18s ease-out;
+    }
+
+    @keyframes fade-in {
+      0% {
+        opacity: 0;
+        transform: translateY(4px);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Overview: KPI row */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .kpi-card {
+      border-radius: 18px;
+      padding: 12px 14px;
+      background: var(--card-soft);
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      min-height: 72px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease,
+        background 0.16s ease;
+    }
+
+    .kpi-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(148, 163, 184, 0.35);
+      background: #ffffff;
+    }
+
+    .kpi-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    .kpi-value {
+      font-size: 20px;
+      font-weight: 650;
+    }
+
+    .kpi-trend {
+      font-size: 12px;
+      color: #16a34a;
+    }
+
+    .kpi-trend.negative {
+      color: #ef4444;
+    }
+
+    /* AI Hero (from previous design, kept as main inspiration) */
+    .ai-hero {
+      margin-top: 4px;
+      border-radius: var(--radius-xl);
+      padding: 18px 18px;
+      display: grid;
+      grid-template-columns: minmax(0, 3.2fr) minmax(0, 1.3fr);
+      gap: 16px;
+      background: radial-gradient(circle at top left, #111827, #020617 54%);
+      color: #e5e7eb;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .ai-hero::before {
+      content: "";
+      position: absolute;
+      right: -40px;
+      top: -40px;
+      width: 180px;
+      height: 180px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 20% 20%, #22c55e, #2563eb 60%, transparent 70%);
+      opacity: 0.9;
+      filter: blur(3px);
+    }
+
+    .ai-hero-main {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .ai-hero-label {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: #9ca3af;
+    }
+
+    .ai-hero-title {
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .ai-hero-body {
+      font-size: 13px;
+      color: #d1d5db;
+      max-width: 420px;
+    }
+
+    .ai-hero-meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+      font-size: 12px;
+      color: #9ca3af;
+      flex-wrap: wrap;
+    }
+
+    .ai-hero-meta span strong {
+      color: #f9fafb;
+      font-weight: 600;
+    }
+
+    .ai-hero-actions {
+      margin-top: 12px;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      border: none;
+      border-radius: 999px;
+      padding: 8px 16px;
+      font-size: 13px;
+      font-weight: 550;
+      background: #22c55e;
+      color: #022c22;
+      cursor: pointer;
+      box-shadow: 0 12px 25px rgba(34, 197, 94, 0.35);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease, background 0.12s ease;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 16px 30px rgba(34, 197, 94, 0.45);
+      background: #16a34a;
+    }
+
+    .btn-ghost {
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: transparent;
+      color: #e5e7eb;
+      padding: 7px 14px;
+      font-size: 12px;
+      cursor: pointer;
+      transition: background 0.16s ease, border-color 0.16s ease;
+    }
+
+    .btn-ghost:hover {
+      background: rgba(15, 23, 42, 0.8);
+      border-color: rgba(148, 163, 184, 0.8);
+    }
+
+    .ai-hero-badge {
+      position: absolute;
+      right: 18px;
+      bottom: 18px;
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ai-hero-pulse {
+      width: 32px;
+      height: 32px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #bbf7d0, #22c55e 60%);
+      box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45);
+      animation: pulse 1.6s infinite;
+    }
+
+    .ai-hero-badge span {
+      font-size: 11px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+    }
+
+    @keyframes pulse {
+      0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0.45);
+      }
+      70% {
+        transform: scale(1.08);
+        box-shadow: 0 0 0 18px rgba(34, 197, 94, 0);
+      }
+      100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(34, 197, 94, 0);
+      }
+    }
+
+    /* Overview lower row */
+    .overview-grid {
+      display: grid;
+      grid-template-columns: minmax(0, 1.7fr) minmax(0, 1.3fr);
+      gap: 16px;
+      margin-top: 4px;
+    }
+
+    .mini-card {
+      background: var(--card-soft);
+      border-radius: 18px;
+      border: 1px solid rgba(148, 163, 184, 0.4);
+      padding: 14px 14px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .mini-card:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 10px 24px rgba(148, 163, 184, 0.35);
+    }
+
+    .mini-card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .mini-card-title {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .mini-card-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .pill {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: var(--accent-soft);
+      color: var(--accent-dark);
+    }
+
+    .placeholder-chart {
+      height: 120px;
+      border-radius: 12px;
+      background: linear-gradient(
+        135deg,
+        rgba(129, 140, 248, 0.1),
+        rgba(59, 130, 246, 0.16)
+      );
+      position: relative;
+      overflow: hidden;
+    }
+
+    .placeholder-chart::before,
+    .placeholder-chart::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-image: linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.3) 0,
+        transparent 40%
+      );
+      opacity: 0.5;
+    }
+
+    .placeholder-chart::after {
+      background-image: linear-gradient(
+        90deg,
+        transparent 0,
+        rgba(255, 255, 255, 0.6) 20%,
+        transparent 40%
+      );
+      transform: translateX(-60%);
+      animation: sweep 4s infinite;
+    }
+
+    @keyframes sweep {
+      0% {
+        transform: translateX(-60%);
+      }
+      100% {
+        transform: translateX(60%);
+      }
+    }
+
+    .system-health {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .health-status {
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .health-desc {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .health-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 4px;
+    }
+
+    .health-badge {
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #ecfdf5;
+      color: #15803d;
+    }
+
+    /* Generic section header */
+    .section-header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 12px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 650;
+    }
+
+    .section-subtitle {
+      font-size: 13px;
+      color: var(--text-muted);
+      max-width: 420px;
+    }
+
+    .tag-soft {
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4f46e5;
+    }
+
+    /* Two-column layout for content */
+    .two-column {
+      display: grid;
+      grid-template-columns: minmax(0, 1.4fr) minmax(0, 1.2fr);
+      gap: 18px;
+      margin-top: 4px;
+    }
+
+    .field-label {
+      font-size: 13px;
+      font-weight: 500;
+      margin-bottom: 4px;
+    }
+
+    .field-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-bottom: 8px;
+    }
+
+    textarea,
+    select,
+    input[type="text"] {
+      width: 100%;
+      border-radius: 16px;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      font-size: 13px;
+      outline: none;
+      resize: vertical;
+      min-height: 80px;
+      background: #f9fafb;
+    }
+
+    input[type="text"] {
+      min-height: 0;
+      height: 38px;
+    }
+
+    textarea:focus,
+    select:focus,
+    input[type="text"]:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(37, 99, 235, 0.25);
+      background: #ffffff;
+    }
+
+    .btn-secondary {
+      border-radius: 999px;
+      padding: 7px 14px;
+      border: 1px solid var(--border-subtle);
+      background: #ffffff;
+      font-size: 13px;
+      cursor: pointer;
+      transition: background 0.16s ease, box-shadow 0.16s ease;
+    }
+
+    .btn-secondary:hover {
+      background: #f3f4f6;
+      box-shadow: 0 8px 18px rgba(148, 163, 184, 0.25);
+    }
+
+    .status-text {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .status-text.success {
+      color: #16a34a;
+    }
+
+    .status-text.error {
+      color: #ef4444;
+    }
+
+    /* Audit viewer (same style as before) */
+    .audit-result-card {
+      background: #0b1120;
+      color: #e5e7eb;
+      border-radius: 18px;
+      padding: 14px 14px 16px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .audit-result-card::before {
+      content: "";
+      position: absolute;
+      inset: -40px;
+      background: radial-gradient(circle at top, #1d4ed8, transparent 55%);
+      opacity: 0.35;
+    }
+
+    .audit-result-inner {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .audit-score-pill {
+      align-self: flex-start;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      font-size: 11px;
+      color: #e5e7eb;
+    }
+
+    .audit-result-title {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .audit-result-body {
+      font-size: 13px;
+      color: #e5e7eb;
+      max-height: 180px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .audit-metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
+    .audit-metrics span strong {
+      color: #f9fafb;
+    }
+
+    .audit-history-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      max-height: 220px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .audit-history-item {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      padding: 8px 10px;
+      background: #f9fafb;
+      cursor: pointer;
+      transition: background 0.12s ease, transform 0.1s ease, box-shadow 0.12s ease;
+    }
+
+    .audit-history-item:hover {
+      background: #eef2ff;
+      transform: translateY(-1px);
+      box-shadow: 0 10px 20px rgba(148, 163, 184, 0.35);
+    }
+
+    .audit-history-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .audit-history-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 2px;
+    }
+
+    /* Students section */
+    .list-table {
+      width: 100%;
+      border-spacing: 0;
+      border-collapse: collapse;
+      font-size: 13px;
+    }
+
+    .list-table thead {
+      background: #f3f4f6;
+    }
+
+    .list-table th,
+    .list-table td {
+      padding: 8px 10px;
+      text-align: left;
+    }
+
+    .list-table th {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-subtle);
+    }
+
+    .list-table tbody tr {
+      background: #ffffff;
+      transition: background 0.12s ease;
+    }
+
+    .list-table tbody tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    .list-table tbody tr:hover {
+      background: #eef2ff;
+    }
+
+    .status-pill {
+      padding: 3px 8px;
+      border-radius: 999px;
+      font-size: 11px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-pill.active {
+      background: #ecfdf5;
+      color: #15803d;
+    }
+
+    .status-pill.risk {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .status-pill.churned {
+      background: #fee2e2;
+      color: #b91c1c;
+    }
+
+    /* Simple badges / chips */
+    .chip {
+      padding: 4px 8px;
+      border-radius: 999px;
+      background: #eef2ff;
+      color: #4b5563;
+      font-size: 11px;
+    }
+
+    /* Inbox items */
+    .inbox-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 260px;
+      overflow-y: auto;
+      padding-right: 4px;
+    }
+
+    .inbox-item {
+      border-radius: 14px;
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      cursor: pointer;
+      transition: background 0.12s ease, box-shadow 0.12s ease, transform 0.1s ease;
+    }
+
+    .inbox-item:hover {
+      background: #eef2ff;
+      box-shadow: 0 10px 20px rgba(148, 163, 184, 0.35);
+      transform: translateY(-1px);
+    }
+
+    .inbox-title {
+      font-size: 13px;
+      font-weight: 500;
+    }
+
+    .inbox-meta {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    /* Onboarding checklist */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .checklist-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .check-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #22c55e;
+      background: #ecfdf5;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      color: #16a34a;
+      margin-top: 1px;
+    }
+
+    .check-label {
+      font-weight: 500;
+    }
+
+    .check-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    @media (max-width: 960px) {
+      .app-shell {
+        flex-direction: column;
+        max-width: 100%;
+      }
+      .sidebar {
+        width: 100%;
+        flex-direction: row;
+        align-items: center;
+        justify-content: space-between;
+        padding: 12px;
+      }
+      .sidebar:hover {
+        width: 100%;
+      }
+      .nav-list {
+        flex-direction: row;
+        flex-wrap: wrap;
+      }
+      .main {
+        width: 100%;
+      }
+      .kpi-row {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+      .ai-hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+      .overview-grid,
+      .two-column {
+        grid-template-columns: minmax(0, 1fr);
+      }
+    }
+  </style>
 </head>
 <body>
-    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
-            <div class="font-bold text-lg sm:text-xl tracking-tighter flex items-center gap-2">
-                <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-black rounded-full"></div>
-                ScaleAI
-            </div>
-            <div class="flex items-center gap-2 sm:gap-4">
-                <span id="userEmail" class="text-xs sm:text-sm text-gray-600 truncate max-w-[120px] sm:max-w-none"></span>
-                <button onclick="logout()" class="text-xs sm:text-sm text-gray-600 hover:text-black whitespace-nowrap">Logout</button>
-            </div>
+  <div class="app-shell">
+    <!-- Sidebar -->
+    <aside class="sidebar">
+      <div class="brand">
+        <div class="brand-icon"></div>
+        <div class="brand-name">ScaleAI OS</div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">Main</div>
+        <div class="nav-list">
+          <button class="nav-item active" data-section="overview">
+            <span class="nav-item-icon">🏠</span>
+            <span class="nav-item-label">Overview</span>
+          </button>
+          <button class="nav-item" data-section="audit">
+            <span class="nav-item-icon">🤖</span>
+            <span class="nav-item-label">AI Audit</span>
+          </button>
+          <button class="nav-item" data-section="students">
+            <span class="nav-item-icon">👨‍🎓</span>
+            <span class="nav-item-label">Students</span>
+          </button>
+          <button class="nav-item" data-section="automations">
+            <span class="nav-item-icon">⚙️</span>
+            <span class="nav-item-label">Automations</span>
+          </button>
+          <button class="nav-item" data-section="campaigns">
+            <span class="nav-item-icon">📣</span>
+            <span class="nav-item-label">Campaigns</span>
+          </button>
+          <button class="nav-item" data-section="reports">
+            <span class="nav-item-icon">📊</span>
+            <span class="nav-item-label">Reports</span>
+          </button>
         </div>
-    </nav>
+      </div>
 
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 sm:py-12">
-        <div class="mb-6 sm:mb-8">
-            <h1 class="text-2xl sm:text-3xl font-bold mb-2">AI Business Audit</h1>
-            <p class="text-sm sm:text-base text-gray-600">Get instant AI-powered recommendations to automate your education business</p>
+      <div>
+        <div class="sidebar-section-label">System</div>
+        <div class="nav-list">
+          <button class="nav-item" data-section="integrations">
+            <span class="nav-item-icon">🔌</span>
+            <span class="nav-item-label">Integrations</span>
+          </button>
+          <button class="nav-item" data-section="playbooks">
+            <span class="nav-item-icon">📚</span>
+            <span class="nav-item-label">Playbooks</span>
+          </button>
+          <button class="nav-item" data-section="inbox">
+            <span class="nav-item-icon">📥</span>
+            <span class="nav-item-label">Inbox</span>
+          </button>
+          <button class="nav-item" data-section="onboarding">
+            <span class="nav-item-icon">✅</span>
+            <span class="nav-item-label">Onboarding</span>
+          </button>
+          <button class="nav-item" data-section="settings">
+            <span class="nav-item-icon">⚙️</span>
+            <span class="nav-item-label">Settings</span>
+          </button>
         </div>
+      </div>
 
-        <!-- Audit Form -->
-        <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
-            <form id="auditForm" class="space-y-6">
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Describe your education business</label>
-                    <textarea
-                        id="businessDescription"
-                        required
-                        rows="4"
-                        placeholder="e.g., I run an online coding bootcamp with 150 students. I spend 3 hours daily answering repetitive questions and manually onboarding new students..."
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
-                    ></textarea>
-                </div>
+      <div class="sidebar-footer">
+        Demo environment · Sample data only
+      </div>
+    </aside>
 
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Current Monthly Revenue (optional)</label>
-                    <select
-                        id="currentRevenue"
-                        class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
-                    >
-                        <option value="">Select range...</option>
-                        <option value="$0-5k">$0 - $5k</option>
-                        <option value="$5k-10k">$5k - $10k</option>
-                        <option value="$10k-25k">$10k - $25k</option>
-                        <option value="$25k-50k">$25k - $50k</option>
-                        <option value="$50k+">$50k+</option>
-                    </select>
-                </div>
+    <!-- Main content -->
+    <main class="main">
+      <header class="top-bar">
+        <div>
+          <div class="top-title">My Dashboard</div>
+          <div class="top-subtitle">
+            High-level view of your education business and AI automations.
+          </div>
+        </div>
+        <div class="user-chip">
+          <div class="user-avatar"></div>
+          <span class="user-email" id="userEmail">Loading…</span>
+          <button class="logout-btn" id="logoutBtn">Logout</button>
+        </div>
+      </header>
 
-                <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
-                    <span id="errorText">Failed to generate audit</span>
-                </div>
+      <div class="content-card">
+        <!-- Overview section -->
+        <section id="overview-section" class="section active">
+          <div class="kpi-row">
+            <div class="kpi-card">
+              <div class="kpi-label">Students Active</div>
+              <div class="kpi-value" id="kpiStudents">–</div>
+              <div class="kpi-trend" id="kpiStudentsTrend">Today</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Monthly Revenue</div>
+              <div class="kpi-value" id="kpiRevenue">–</div>
+              <div class="kpi-trend" id="kpiRevenueTrend">vs last month</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">Growth Rate</div>
+              <div class="kpi-value" id="kpiGrowth">–</div>
+              <div class="kpi-trend">Momentum</div>
+            </div>
+            <div class="kpi-card">
+              <div class="kpi-label">System Health</div>
+              <div class="kpi-value">Healthy</div>
+              <div class="kpi-trend">All automations online</div>
+            </div>
+          </div>
 
-                <button
-                    type="submit"
-                    id="submitButton"
-                    class="bg-slate-900 text-white px-6 sm:px-8 py-2.5 sm:py-3 rounded-full font-bold text-sm sm:text-base hover:bg-slate-800 w-full sm:w-auto"
-                >
-                    Generate AI Audit
+          <div class="ai-hero">
+            <div class="ai-hero-main">
+              <div class="ai-hero-label">AI Recommendation</div>
+              <div class="ai-hero-title" id="aiHeroTitle">
+                Launch a reactivation campaign for inactive students.
+              </div>
+              <p class="ai-hero-body" id="aiHeroBody">
+                Based on your recent activity, the biggest opportunity is
+                re-engaging students who haven't attended a session or opened
+                an email in the last 14 days.
+              </p>
+              <div class="ai-hero-meta">
+                <span>Expected impact: <strong>+6–12% reactivation</strong></span>
+                <span>Time saved: <strong>2–4 hours/week</strong></span>
+              </div>
+              <div class="ai-hero-actions">
+                <button class="btn-primary" id="btnOpenAuditFromHero">
+                  Run AI Audit
                 </button>
-            </form>
-        </div>
+                <button class="btn-ghost" type="button">
+                  View automation suggestions
+                </button>
+              </div>
+            </div>
+            <div class="ai-hero-badge">
+              <div class="ai-hero-pulse"></div>
+              <span>Real-Time System View</span>
+            </div>
+          </div>
 
-        <!-- Audit Result -->
-        <div id="auditResult" class="hidden bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 md:p-8 mb-6 sm:mb-8">
-            <div class="flex flex-col sm:flex-row items-start justify-between mb-4 gap-3">
-                <h2 class="text-lg sm:text-xl font-bold">Your AI Business Audit</h2>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <span class="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">New</span>
-                    <button id="publishButton" onclick="publishToGitHub()" class="btn-hover-effect bg-slate-900 text-white px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg text-xs sm:text-sm font-medium hover:bg-slate-800 flex items-center gap-2 flex-1 sm:flex-initial justify-center">
-                        <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                        </svg>
-                        Publish to GitHub
-                    </button>
+          <div class="overview-grid">
+            <div class="mini-card">
+              <div class="mini-card-header">
+                <div>
+                  <div class="mini-card-title">Lead Flow</div>
+                  <div class="mini-card-sub">Past 6 weeks (sample data)</div>
                 </div>
+                <span class="pill">Demo Insights</span>
+              </div>
+              <div class="placeholder-chart"></div>
             </div>
-            <div id="auditContent" class="prose max-w-none text-gray-700 whitespace-pre-wrap mb-4"></div>
-            <div id="publishSuccess" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
-                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
-                </svg>
-                <span>Audit published to GitHub successfully!</span>
-            </div>
-            <div id="publishError" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm"></div>
-        </div>
 
-        <!-- Audit History -->
-        <div class="bg-white rounded-xl sm:rounded-2xl shadow-sm border border-gray-200 p-4 sm:p-6 md:p-8">
-            <h2 class="text-lg sm:text-xl font-bold mb-4">Previous Audits</h2>
-            <div id="auditHistory" class="space-y-4">
-                <p class="text-gray-500 text-sm">No previous audits</p>
+            <div class="mini-card">
+              <div class="mini-card-header">
+                <div>
+                  <div class="mini-card-title">System Health</div>
+                  <div class="mini-card-sub">
+                    Monitoring key automation checks
+                  </div>
+                </div>
+              </div>
+              <div class="system-health">
+                <div class="health-status">All systems running smoothly</div>
+                <p class="health-desc">
+                  No failed automations detected in the last 24h. Alerts will
+                  appear here if anything needs your attention.
+                </p>
+                <div class="health-badges">
+                  <span class="health-badge">Workflows online</span>
+                  <span class="health-badge">No error spikes</span>
+                  <span class="health-badge">API latency normal</span>
+                </div>
+              </div>
             </div>
-        </div>
+          </div>
+        </section>
+
+        <!-- AI Audit section -->
+        <section id="audit-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">AI Business Audit</div>
+              <div class="section-subtitle">
+                Describe your education business and let ScaleAI surface the
+                highest-leverage automations, time savings, and projected
+                impact. This is a demo environment – data is only used for this
+                session.
+              </div>
+            </div>
+            <span class="tag-soft">Powered by AI</span>
+          </div>
+
+          <div class="two-column">
+            <!-- Left: form -->
+            <div>
+              <div class="field-label">Describe your education business</div>
+              <div class="field-hint">
+                e.g. “We run live online math cohorts for 80+ GCSE students.
+                Most support happens on WhatsApp and manual emails.”
+              </div>
+              <textarea id="businessDescription" placeholder="Describe what you do, how many students, how you deliver, and where you feel the most operational pain..."></textarea>
+
+              <div style="margin-top: 12px;">
+                <div class="field-label">Current Monthly Revenue (optional)</div>
+                <div class="field-hint">
+                  A range is enough – just to help the AI calibrate impact.
+                </div>
+                <select id="currentRevenue">
+                  <option value="">Select range...</option>
+                  <option value="0-1k">£0 – £1k</option>
+                  <option value="1k-5k">£1k – £5k</option>
+                  <option value="5k-15k">£5k – £15k</option>
+                  <option value="15k-50k">£15k – £50k</option>
+                  <option value="50k+">£50k+</option>
+                </select>
+              </div>
+
+              <div class="audit-actions" style="margin-top: 10px;">
+                <button class="btn-primary" id="generateAuditBtn">
+                  <span id="generateAuditLabel">Generate AI Audit</span>
+                </button>
+                <button class="btn-secondary" id="refreshAuditsBtn" type="button">
+                  Refresh previous audits
+                </button>
+                <span class="status-text" id="auditStatus"></span>
+              </div>
+            </div>
+
+            <!-- Right: latest audit + history -->
+            <div>
+              <div class="audit-result-card" id="auditResultCard">
+                <div class="audit-result-inner">
+                  <span class="audit-score-pill" id="auditScorePill">
+                    No audit generated yet
+                  </span>
+                  <div class="audit-result-title">
+                    When you generate an audit, it will appear here.
+                  </div>
+                  <div class="audit-result-body" id="auditResultBody">
+                    You’ll see a structured breakdown of your automation
+                    readiness, top bottlenecks, and high-leverage workflows
+                    recommended for your education business.
+                  </div>
+                  <div class="audit-metrics" id="auditMetrics">
+                    <span><strong>Expected impact:</strong> –</span>
+                    <span><strong>Time saved:</strong> –</span>
+                  </div>
+                </div>
+              </div>
+
+              <div style="margin-top: 12px;">
+                <div class="mini-card">
+                  <div class="mini-card-header">
+                    <div>
+                      <div class="mini-card-title">Previous Audits</div>
+                      <div class="mini-card-sub">
+                        Click an audit to load it into the viewer.
+                      </div>
+                    </div>
+                    <button class="btn-secondary" id="clearAuditViewBtn" type="button">
+                      Clear view
+                    </button>
+                  </div>
+                  <div class="audit-history-list" id="auditHistoryList">
+                    <div class="audit-history-item">
+                      <div class="audit-history-title">
+                        No previous audits yet
+                      </div>
+                      <div class="audit-history-meta">
+                        Generate your first audit to start building history.
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </section>
+
+        <!-- Students section -->
+        <section id="students-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Students</div>
+              <div class="section-subtitle">
+                A high-level view of your most important people: active,
+                at-risk, and churned students.
+              </div>
+            </div>
+            <span class="tag-soft">Sample dataset</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Cohort Snapshot</div>
+                    <div class="mini-card-sub">Sample for demo purposes</div>
+                  </div>
+                </div>
+                <table class="list-table">
+                  <thead>
+                    <tr>
+                      <th>Student</th>
+                      <th>Status</th>
+                      <th>Last Activity</th>
+                      <th>Segment</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Aisha Khan</td>
+                      <td><span class="status-pill active">Active</span></td>
+                      <td>Yesterday</td>
+                      <td>GCSE · High intent</td>
+                    </tr>
+                    <tr>
+                      <td>James Taylor</td>
+                      <td><span class="status-pill risk">At risk</span></td>
+                      <td>7 days ago</td>
+                      <td>A-level · Exam crunch</td>
+                    </tr>
+                    <tr>
+                      <td>Maria Lopez</td>
+                      <td><span class="status-pill active">Active</span></td>
+                      <td>Today</td>
+                      <td>GCSE · Parent sponsored</td>
+                    </tr>
+                    <tr>
+                      <td>Daniel Wu</td>
+                      <td><span class="status-pill churned">Churned</span></td>
+                      <td>28 days ago</td>
+                      <td>Adult · Trial only</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Segmentation</div>
+                    <div class="mini-card-sub">
+                      Simple segments to prioritise outreach.
+                    </div>
+                  </div>
+                </div>
+                <div class="system-health">
+                  <div class="health-status">
+                    Top segments to watch this week
+                  </div>
+                  <p class="health-desc">
+                    AI will eventually auto-group these based on behaviour,
+                    spend, and risk of churn.
+                  </p>
+                  <div class="health-badges">
+                    <span class="health-badge">At-risk (no show)</span>
+                    <span class="health-badge">High LTV parents</span>
+                    <span class="health-badge">Trial ending soon</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Automations section -->
+        <section id="automations-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Automations</div>
+              <div class="section-subtitle">
+                See what ScaleAI is responsible for – and where new workflows
+                could unlock more leverage.
+              </div>
+            </div>
+            <span class="tag-soft">Workflow catalogue</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Active Automations</div>
+                    <div class="mini-card-sub">Sample configuration</div>
+                  </div>
+                </div>
+                <ul class="checklist">
+                  <li class="checklist-item">
+                    <div class="check-icon">✓</div>
+                    <div>
+                      <div class="check-label">New lead → Welcome sequence</div>
+                      <div class="check-desc">
+                        Captures website leads, tags them, and sends a 5-day
+                        education sequence with booking link.
+                      </div>
+                    </div>
+                  </li>
+                  <li class="checklist-item">
+                    <div class="check-icon">✓</div>
+                    <div>
+                      <div class="check-label">Payment failed → Recovery flow</div>
+                      <div class="check-desc">
+                        Sends a friendly reminder, then follow-up messages with
+                        a one-click payment link.
+                      </div>
+                    </div>
+                  </li>
+                  <li class="checklist-item">
+                    <div class="check-icon">✓</div>
+                    <div>
+                      <div class="check-label">Session reminder</div>
+                      <div class="check-desc">
+                        Notifies students 24h and 1h before live sessions via
+                        email and SMS.
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Opportunities</div>
+                    <div class="mini-card-sub">
+                      AI-suggested workflows to add next.
+                    </div>
+                  </div>
+                  <button class="btn-secondary" type="button">
+                    View all suggestions
+                  </button>
+                </div>
+                <div class="system-health">
+                  <p class="health-desc">
+                    Once your data is live, ScaleAI will propose automations
+                    based on actual friction points – like slow response times
+                    or repeated manual tasks.
+                  </p>
+                  <div class="health-badges">
+                    <span class="health-badge">Onboarding gaps</span>
+                    <span class="health-badge">Lead nurturing</span>
+                    <span class="health-badge">Churn recovery</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Campaigns section -->
+        <section id="campaigns-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Campaigns</div>
+              <div class="section-subtitle">
+                High-level overview of education campaigns: launches, reactivation,
+                and exam prep pushes.
+              </div>
+            </div>
+            <span class="tag-soft">Messaging control</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Recent Campaigns</div>
+                    <div class="mini-card-sub">Sample metrics</div>
+                  </div>
+                </div>
+                <table class="list-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Type</th>
+                      <th>Sent</th>
+                      <th>Open</th>
+                      <th>Clicks</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Cohort 6 Launch</td>
+                      <td>Email</td>
+                      <td>320</td>
+                      <td>62%</td>
+                      <td>18%</td>
+                    </tr>
+                    <tr>
+                      <td>Inactive Students Reactivation</td>
+                      <td>SMS + Email</td>
+                      <td>140</td>
+                      <td>74%</td>
+                      <td>24%</td>
+                    </tr>
+                    <tr>
+                      <td>Exam Prep Week</td>
+                      <td>Email</td>
+                      <td>210</td>
+                      <td>58%</td>
+                      <td>16%</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">New Campaign</div>
+                    <div class="mini-card-sub">
+                      This will eventually become a full campaign builder.
+                    </div>
+                  </div>
+                </div>
+                <div>
+                  <div class="field-label">Goal</div>
+                  <select>
+                    <option>Choose a goal...</option>
+                    <option>Fill next cohort</option>
+                    <option>Reactivate inactive students</option>
+                    <option>Upsell 1:1 support</option>
+                  </select>
+                  <div class="field-label" style="margin-top: 10px;">Audience</div>
+                  <select>
+                    <option>Select audience...</option>
+                    <option>All active students</option>
+                    <option>At-risk students</option>
+                    <option>Past students only</option>
+                  </select>
+                  <div class="audit-actions" style="margin-top: 10px;">
+                    <button class="btn-secondary" type="button">
+                      Draft with AI (coming soon)
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Reports section -->
+        <section id="reports-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Reports</div>
+              <div class="section-subtitle">
+                High-level reporting to screenshot for your investors, partners,
+                or just future you.
+              </div>
+            </div>
+            <span class="tag-soft">Executive view</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Revenue Trend</div>
+                    <div class="mini-card-sub">Past 6 months (sample)</div>
+                  </div>
+                </div>
+                <div class="placeholder-chart"></div>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Engagement Snapshot</div>
+                    <div class="mini-card-sub">
+                      Shows show-up, completion, and response rates.
+                    </div>
+                  </div>
+                </div>
+                <div class="system-health">
+                  <div class="health-status">Your business at a glance</div>
+                  <p class="health-desc">
+                    Once your live data is connected, this view will summarize
+                    student engagement, campaign performance, and at-risk
+                    revenue in one place.
+                  </p>
+                  <div class="health-badges">
+                    <span class="health-badge">Show-up rate</span>
+                    <span class="health-badge">Completion</span>
+                    <span class="health-badge">Student satisfaction</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Integrations section -->
+        <section id="integrations-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Integrations</div>
+              <div class="section-subtitle">
+                Connect the tools you already use so ScaleAI can automate more
+                of the boring work.
+              </div>
+            </div>
+            <span class="tag-soft">Future-facing</span>
+          </div>
+          <div class="overview-grid">
+            <div class="mini-card">
+              <div class="mini-card-header">
+                <div>
+                  <div class="mini-card-title">Stripe</div>
+                  <div class="mini-card-sub">Payments & subscriptions</div>
+                </div>
+                <span class="chip">Coming soon</span>
+              </div>
+              <p class="health-desc">
+                Once connected, ScaleAI can trigger automations from payment
+                events like failed charges, new subscriptions, and refunds.
+              </p>
+            </div>
+
+            <div class="mini-card">
+              <div class="mini-card-header">
+                <div>
+                  <div class="mini-card-title">Calendly / Scheduling</div>
+                  <div class="mini-card-sub">Bookings & reminders</div>
+                </div>
+                <span class="chip">Planned</span>
+              </div>
+              <p class="health-desc">
+                Automate reminders, follow-ups, and feedback requests around
+                booked sessions.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Playbooks section -->
+        <section id="playbooks-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Playbooks</div>
+              <div class="section-subtitle">
+                Reusable recipes for common scenarios like launching cohorts,
+                recovering churn, and running exam sprints.
+              </div>
+            </div>
+            <span class="tag-soft">AI-assisted recipes</span>
+          </div>
+          <div class="overview-grid">
+            <div class="mini-card">
+              <div class="mini-card-header">
+                <div>
+                  <div class="mini-card-title">Launch a New Cohort</div>
+                  <div class="mini-card-sub">
+                    From waitlist to full, in 10 days.
+                  </div>
+                </div>
+                <span class="pill">Playbook</span>
+              </div>
+              <p class="health-desc">
+                Define your date, price, and capacity. AI will suggest a
+                countdown of announcements, testimonials, and urgency moments.
+              </p>
+            </div>
+            <div class="mini-card">
+              <div class="mini-card-header">
+                <div>
+                  <div class="mini-card-title">Reactivate Inactive Students</div>
+                  <div class="mini-card-sub">Win back 10–20% of lost users.</div>
+                </div>
+                <span class="pill">Playbook</span>
+              </div>
+              <p class="health-desc">
+                Automatically identify students who’ve gone quiet and send a
+                friendly check-in sequence with tailored offers.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <!-- Inbox section -->
+        <section id="inbox-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Inbox</div>
+              <div class="section-subtitle">
+                A single place AI will eventually surface questions, issues,
+                and alerts that need your attention.
+              </div>
+            </div>
+            <span class="tag-soft">Central nervous system</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Today</div>
+                    <div class="mini-card-sub">
+                      Sample alerts and student messages.
+                    </div>
+                  </div>
+                </div>
+                <div class="inbox-list">
+                  <div class="inbox-item">
+                    <div class="inbox-title">Payment failed · James Taylor</div>
+                    <div class="inbox-meta">
+                      AI suggests: send recovery flow with payment link.
+                    </div>
+                  </div>
+                  <div class="inbox-item">
+                    <div class="inbox-title">No-shows increasing in Cohort 5</div>
+                    <div class="inbox-meta">
+                      3 students missed last 2 sessions – propose reminder
+                      workflow.
+                    </div>
+                  </div>
+                  <div class="inbox-item">
+                    <div class="inbox-title">Parent asked for progress report</div>
+                    <div class="inbox-meta">
+                      AI can assemble a summary from attendance + notes (coming
+                      soon).
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Triage Rules</div>
+                    <div class="mini-card-sub">
+                      How AI will decide what to show you here.
+                    </div>
+                  </div>
+                </div>
+                <div class="system-health">
+                  <p class="health-desc">
+                    Priority is given to anything that affects revenue, student
+                    experience, or your time directly – failed payments, churn
+                    signals, and repeated questions.
+                  </p>
+                  <div class="health-badges">
+                    <span class="health-badge">Payment issues</span>
+                    <span class="health-badge">Churn signals</span>
+                    <span class="health-badge">High-friction tasks</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Onboarding section -->
+        <section id="onboarding-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Onboarding Checklist</div>
+              <div class="section-subtitle">
+                A simple checklist for getting your ScaleAI environment ready to
+                support real students.
+              </div>
+            </div>
+            <span class="tag-soft">Guided setup</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <ul class="checklist">
+                  <li class="checklist-item">
+                    <div class="check-icon">1</div>
+                    <div>
+                      <div class="check-label">Create your first AI audit</div>
+                      <div class="check-desc">
+                        Use the AI Audit section to map out your automation
+                        opportunities.
+                      </div>
+                    </div>
+                  </li>
+                  <li class="checklist-item">
+                    <div class="check-icon">2</div>
+                    <div>
+                      <div class="check-label">Define your core automations</div>
+                      <div class="check-desc">
+                        Start with onboarding, reminders, and payment recovery –
+                        your highest-leverage flows.
+                      </div>
+                    </div>
+                  </li>
+                  <li class="checklist-item">
+                    <div class="check-icon">3</div>
+                    <div>
+                      <div class="check-label">Connect your tools</div>
+                      <div class="check-desc">
+                        Stripe, calendars, and messaging tools will unlock the
+                        full power of ScaleAI.
+                      </div>
+                    </div>
+                  </li>
+                </ul>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="mini-card-header">
+                  <div>
+                    <div class="mini-card-title">Future onboarding</div>
+                    <div class="mini-card-sub">
+                      How this will feel once fully productized.
+                    </div>
+                  </div>
+                </div>
+                <p class="health-desc">
+                  New users will eventually be guided through a 5-10 minute
+                  onboarding that maps their business model, tools, and goals –
+                  so ScaleAI can propose a bespoke automation plan on day one.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Settings section -->
+        <section id="settings-section" class="section">
+          <div class="section-header-row">
+            <div>
+              <div class="section-title">Settings</div>
+              <div class="section-subtitle">
+                Basic account and workspace settings. In a real deployment,
+                this is where you’d manage billing, team, and preferences.
+              </div>
+            </div>
+            <span class="tag-soft">Demo only</span>
+          </div>
+          <div class="two-column">
+            <div>
+              <div class="mini-card">
+                <div class="field-label">Workspace Name</div>
+                <input type="text" value="My Education Studio" />
+                <div class="field-label" style="margin-top: 10px;">Timezone</div>
+                <select>
+                  <option>UTC</option>
+                  <option>Europe/London</option>
+                  <option>America/New_York</option>
+                  <option>Asia/Singapore</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <div class="mini-card">
+                <div class="field-label">Data mode</div>
+                <div class="field-hint">
+                  In this demo, everything is sample data. In production, you’d
+                  see real metrics only visible to you.
+                </div>
+                <div class="health-badges">
+                  <span class="health-badge">Demo environment</span>
+                  <span class="health-badge">No live student data</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
     </main>
+  </div>
 
-    <script>
-        // Check authentication
-        fetch('/api/me')
-            .then(res => {
-                if (!res.ok) {
-                    window.location.href = '/login.html';
-                    return;
-                }
-                return res.json();
-            })
-            .then(user => {
-                if (user) {
-                    document.getElementById('userEmail').textContent = user.email;
-                    loadAuditHistory();
-                }
-            })
-            .catch(() => {
-                window.location.href = '/login.html';
-            });
+  <script>
+    // --- Sections mapping ---
+    const sections = {
+      overview: document.getElementById("overview-section"),
+      audit: document.getElementById("audit-section"),
+      students: document.getElementById("students-section"),
+      automations: document.getElementById("automations-section"),
+      campaigns: document.getElementById("campaigns-section"),
+      reports: document.getElementById("reports-section"),
+      integrations: document.getElementById("integrations-section"),
+      playbooks: document.getElementById("playbooks-section"),
+      inbox: document.getElementById("inbox-section"),
+      onboarding: document.getElementById("onboarding-section"),
+      settings: document.getElementById("settings-section")
+    };
 
-        function logout() {
-            fetch('/api/logout', { method: 'POST' })
-                .then(() => {
-                    window.location.href = '/index.html';
-                });
+    const navButtons = document.querySelectorAll(".nav-item[data-section]");
+
+    function showSection(name) {
+      Object.entries(sections).forEach(([key, el]) => {
+        if (key === name) {
+          el.classList.add("active");
+        } else {
+          el.classList.remove("active");
         }
+      });
 
-        document.getElementById('auditForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
+      navButtons.forEach((btn) => {
+        if (btn.dataset.section === name) {
+          btn.classList.add("active");
+        } else {
+          btn.classList.remove("active");
+        }
+      });
+    }
 
-            const businessDescription = document.getElementById('businessDescription').value;
-            const currentRevenue = document.getElementById('currentRevenue').value;
-            const submitButton = document.getElementById('submitButton');
-            const errorDiv = document.getElementById('errorMessage');
-            const errorText = document.getElementById('errorText');
-            const resultDiv = document.getElementById('auditResult');
-            const contentDiv = document.getElementById('auditContent');
+    navButtons.forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const section = btn.dataset.section;
+        showSection(section);
+        if (section === "audit") {
+          loadAuditHistory();
+        }
+      });
+    });
 
-            errorDiv.classList.add('hidden');
-            resultDiv.classList.add('hidden');
+    // Hero button goes to Audit section
+    document
+      .getElementById("btnOpenAuditFromHero")
+      .addEventListener("click", () => {
+        showSection("audit");
+        loadAuditHistory();
+        document.getElementById("businessDescription").focus();
+      });
 
-            submitButton.disabled = true;
-            submitButton.innerHTML = '<svg class="animate-spin h-5 w-5 mx-auto" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>';
-
-            try {
-                const response = await fetch('/api/audit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ businessDescription, currentRevenue })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    contentDiv.textContent = data.audit;
-                    currentAuditId = data.auditId;
-                    resultDiv.classList.remove('hidden');
-                    resultDiv.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    loadAuditHistory();
-                    document.getElementById('auditForm').reset();
-                } else {
-                    errorText.textContent = data.error || 'Failed to generate audit';
-                    errorDiv.classList.remove('hidden');
-                }
-            } catch (error) {
-                errorText.textContent = 'Network error. Please try again.';
-                errorDiv.classList.remove('hidden');
-            } finally {
-                submitButton.disabled = false;
-                submitButton.textContent = 'Generate AI Audit';
-            }
+    // --- User info & auth ---
+    async function fetchCurrentUser() {
+      try {
+        const res = await fetch("/api/me", {
+          credentials: "include"
         });
 
-        async function loadAuditHistory() {
-            try {
-                const response = await fetch('/api/audits');
-                if (!response.ok) return;
-
-                const audits = await response.json();
-                const historyDiv = document.getElementById('auditHistory');
-
-                if (audits.length === 0) {
-                    historyDiv.innerHTML = '<p class="text-gray-500 text-sm">No previous audits</p>';
-                    return;
-                }
-
-                historyDiv.innerHTML = audits.map(audit => `
-                    <div class="border border-gray-200 rounded-lg p-4">
-                        <div class="flex items-center justify-between mb-2">
-                            <span class="text-xs text-gray-500">${new Date(audit.created_at).toLocaleDateString()}</span>
-                            <span class="text-xs bg-gray-100 px-2 py-1 rounded">${audit.current_revenue || 'N/A'}</span>
-                        </div>
-                        <p class="text-sm text-gray-700 mb-2">${audit.business_description.substring(0, 100)}...</p>
-                        <details class="text-sm">
-                            <summary class="cursor-pointer text-slate-900 font-medium">View full audit</summary>
-                            <div class="mt-3 pt-3 border-t border-gray-200 whitespace-pre-wrap text-gray-700">${audit.ai_response}</div>
-                        </details>
-                    </div>
-                `).join('');
-            } catch (error) {
-                console.error('Failed to load history:', error);
-            }
+        if (res.status === 401) {
+          window.location.href = "/login.html";
+          return;
         }
 
-        let currentAuditId = null;
-
-        async function publishToGitHub() {
-            const publishButton = document.getElementById('publishButton');
-            const successDiv = document.getElementById('publishSuccess');
-            const errorDiv = document.getElementById('publishError');
-            const auditContent = document.getElementById('auditContent').textContent;
-
-            successDiv.classList.add('hidden');
-            errorDiv.classList.add('hidden');
-
-            publishButton.disabled = true;
-            publishButton.innerHTML = '<svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg> Publishing...';
-
-            try {
-                const response = await fetch('/api/publish-audit', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ auditId: currentAuditId, auditContent })
-                });
-
-                const data = await response.json();
-
-                if (response.ok) {
-                    successDiv.classList.remove('hidden');
-                    setTimeout(() => successDiv.classList.add('hidden'), 5000);
-                } else {
-                    errorDiv.textContent = data.error || 'Failed to publish to GitHub';
-                    errorDiv.classList.remove('hidden');
-                }
-            } catch (error) {
-                errorDiv.textContent = 'Network error. Please try again.';
-                errorDiv.classList.remove('hidden');
-            } finally {
-                publishButton.disabled = false;
-                publishButton.innerHTML = '<svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg> Publish to GitHub';
-            }
+        const user = await res.json();
+        const emailEl = document.getElementById("userEmail");
+        if (user && user.email) {
+          emailEl.textContent = user.email;
+        } else {
+          emailEl.textContent = "Signed in";
         }
-    </script>
+      } catch (e) {
+        console.error("Failed to load current user", e);
+        document.getElementById("userEmail").textContent = "User";
+      }
+    }
+
+    document.getElementById("logoutBtn").addEventListener("click", async () => {
+      try {
+        await fetch("/api/logout", {
+          method: "POST",
+          credentials: "include"
+        });
+      } catch (e) {
+        console.error("Logout failed", e);
+      }
+      window.location.href = "/login.html";
+    });
+
+    // --- Fake overview stats (for demo) ---
+    function animateNumber(element, target, duration = 650) {
+      const start = 0;
+      const startTime = performance.now();
+
+      function tick(now) {
+        const elapsed = now - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const value = Math.floor(start + (target - start) * progress);
+        element.textContent = value.toLocaleString();
+        if (progress < 1) requestAnimationFrame(tick);
+      }
+
+      requestAnimationFrame(tick);
+    }
+
+    function initOverview() {
+      const studentsEl = document.getElementById("kpiStudents");
+      const revenueEl = document.getElementById("kpiRevenue");
+      const growthEl = document.getElementById("kpiGrowth");
+
+      animateNumber(studentsEl, 4946);
+      animateNumber(revenueEl, 14300);
+      growthEl.textContent = "+8.5%";
+      document.getElementById("kpiStudentsTrend").textContent = "Today";
+      document.getElementById("kpiRevenueTrend").textContent = "vs last month";
+    }
+
+    // --- Audit logic ---
+    const generateBtn = document.getElementById("generateAuditBtn");
+    const generateLabel = document.getElementById("generateAuditLabel");
+    const auditStatus = document.getElementById("auditStatus");
+    const auditResultBody = document.getElementById("auditResultBody");
+    const auditScorePill = document.getElementById("auditScorePill");
+    const auditMetrics = document.getElementById("auditMetrics");
+    const auditHistoryList = document.getElementById("auditHistoryList");
+
+    async function loadAuditHistory() {
+      try {
+        const res = await fetch("/api/audits", {
+          credentials: "include"
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to load audits");
+        }
+
+        const audits = await res.json();
+
+        auditHistoryList.innerHTML = "";
+
+        if (!audits.length) {
+          auditHistoryList.innerHTML = `
+            <div class="audit-history-item">
+              <div class="audit-history-title">No previous audits yet</div>
+              <div class="audit-history-meta">
+                Generate your first audit to start building history.
+              </div>
+            </div>
+          `;
+          return;
+        }
+
+        audits.forEach((audit) => {
+          const item = document.createElement("div");
+          item.className = "audit-history-item";
+          const desc =
+            audit.businessDescription ||
+            audit.business_description ||
+            `Audit #${audit.id}`;
+          const created =
+            audit.createdAt || audit.created_at || new Date().toISOString();
+          item.innerHTML = `
+            <div class="audit-history-title">
+              ${desc.slice(0, 60)}
+            </div>
+            <div class="audit-history-meta">
+              ${new Date(created).toLocaleString()}
+            </div>
+          `;
+          item.addEventListener("click", () => {
+            showAuditInViewer(audit);
+          });
+          auditHistoryList.appendChild(item);
+        });
+
+        // Show latest audit in viewer by default
+        showAuditInViewer(audits[0]);
+      } catch (e) {
+        console.error(e);
+        auditHistoryList.innerHTML = `
+          <div class="audit-history-item">
+            <div class="audit-history-title">Could not load audits</div>
+            <div class="audit-history-meta">
+              This is a demo environment – try again in a moment.
+            </div>
+          </div>
+        `;
+      }
+    }
+
+    function showAuditInViewer(audit) {
+      if (!audit) return;
+      const desc =
+        audit.businessDescription ||
+        audit.business_description ||
+        `Audit #${audit.id}`;
+      const body = audit.aiResponse || audit.ai_response || "(No content)";
+      const created =
+        audit.createdAt || audit.created_at || new Date().toISOString();
+      const revenue =
+        audit.currentRevenue || audit.current_revenue || "Not specified";
+
+      auditScorePill.textContent = `Automation Audit #${audit.id}`;
+      auditResultBody.textContent = body;
+      auditMetrics.innerHTML = `
+        <span><strong>Created:</strong> ${new Date(
+          created
+        ).toLocaleString()}</span>
+        <span><strong>Revenue:</strong> ${revenue}</span>
+      `;
+    }
+
+    generateBtn.addEventListener("click", async () => {
+      const description = document
+        .getElementById("businessDescription")
+        .value.trim();
+      const revenue = document.getElementById("currentRevenue").value;
+
+      if (!description) {
+        auditStatus.textContent = "Please describe your business first.";
+        auditStatus.className = "status-text error";
+        return;
+      }
+
+      generateBtn.disabled = true;
+      generateLabel.textContent = "Generating…";
+      auditStatus.textContent = "Asking ScaleAI to analyze your business…";
+      auditStatus.className = "status-text";
+
+      try {
+        const res = await fetch("/api/audit", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          credentials: "include",
+          body: JSON.stringify({
+            businessDescription: description,
+            currentRevenue: revenue || null
+          })
+        });
+
+        if (res.status === 401) {
+          window.location.href = "/login.html";
+          return;
+        }
+
+        const data = await res.json();
+
+        if (!res.ok || !data.success) {
+          throw new Error(data.error || "Failed to generate audit");
+        }
+
+        auditStatus.textContent = "Audit generated and saved.";
+        auditStatus.className = "status-text success";
+
+        // Display result
+        auditScorePill.textContent = `Automation Audit #${data.auditId}`;
+        auditResultBody.textContent = data.audit;
+        auditMetrics.innerHTML = `
+          <span><strong>Created just now</strong></span>
+          <span><strong>Revenue range:</strong> ${
+            revenue || "Not specified"
+          }</span>
+        `;
+
+        // Refresh history
+        loadAuditHistory();
+      } catch (e) {
+        console.error("Audit error", e);
+        auditStatus.textContent =
+          "Something went wrong generating the audit.";
+        auditStatus.className = "status-text error";
+      } finally {
+        generateBtn.disabled = false;
+        generateLabel.textContent = "Generate AI Audit";
+      }
+    });
+
+    document
+      .getElementById("refreshAuditsBtn")
+      .addEventListener("click", loadAuditHistory);
+
+    document
+      .getElementById("clearAuditViewBtn")
+      .addEventListener("click", () => {
+        auditScorePill.textContent = "No audit selected";
+        auditResultBody.textContent =
+          "Select an audit from the list to view the full report.";
+        auditMetrics.innerHTML =
+          '<span><strong>Created:</strong> –</span><span><strong>Revenue:</strong> –</span>';
+      });
+
+    // Init on load
+    document.addEventListener("DOMContentLoaded", () => {
+      fetchCurrentUser();
+      initOverview();
+    });
+  </script>
 </body>
 </html>
