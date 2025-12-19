@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact | ScaleAI Systems</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="alternate icon" href="favicon.ico">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;800&display=swap" rel="stylesheet">
+    <style>
+        * {
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(to bottom, #f8fafc 0%, #ffffff 100%);
+            min-height: 100vh;
+        }
+    </style>
+</head>
+<body>
+    <nav class="fixed w-full z-50 top-0 left-0 bg-white/80 backdrop-blur-md border-b border-gray-100">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-14 sm:h-16 flex items-center justify-between">
+            <a href="index.html" class="font-bold text-lg sm:text-xl tracking-tighter flex items-center gap-2">
+                <div class="w-2.5 h-2.5 sm:w-3 sm:h-3 bg-black rounded-full"></div>
+                ScaleAI
+            </a>
+            <div class="flex items-center gap-4">
+                <a href="about.html" class="text-sm text-gray-600 hover:text-black">About</a>
+                <a href="contact.html" class="text-sm font-medium">Contact</a>
+                <a href="login.html" class="text-sm text-gray-600 hover:text-black">Sign In</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="pt-24 sm:pt-32 pb-12 sm:pb-20 px-4 sm:px-6">
+        <div class="max-w-2xl mx-auto">
+            <div class="text-center mb-8 sm:mb-10">
+                <h1 class="text-3xl sm:text-4xl font-bold tracking-tight mb-3">Get In Touch</h1>
+                <p class="text-base sm:text-lg text-gray-600">
+                    Interested in licensing, acquiring, or discussing this project?
+                </p>
+            </div>
+
+            <div class="bg-white rounded-xl sm:rounded-2xl shadow-xl border border-gray-200 p-6 sm:p-8 mb-8">
+                <form id="contactForm" class="space-y-5">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Name</label>
+                        <input
+                            type="text"
+                            id="name"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Email</label>
+                        <input
+                            type="email"
+                            id="email"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        />
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Inquiry Type</label>
+                        <select
+                            id="inquiryType"
+                            required
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black"
+                        >
+                            <option value="">Select...</option>
+                            <option value="licensing">Project Licensing</option>
+                            <option value="acquisition">Acquisition Interest</option>
+                            <option value="collaboration">Collaboration Opportunity</option>
+                            <option value="technical">Technical Question</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">Message</label>
+                        <textarea
+                            id="message"
+                            required
+                            rows="6"
+                            class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black resize-none"
+                        ></textarea>
+                    </div>
+
+                    <div id="successMessage" class="hidden bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg text-sm">
+                        <span>Thank you! Your message has been received.</span>
+                    </div>
+
+                    <div id="errorMessage" class="hidden bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg text-sm">
+                        <span id="errorText">Failed to send message. Please try again.</span>
+                    </div>
+
+                    <button
+                        type="submit"
+                        id="submitButton"
+                        class="w-full bg-slate-900 text-white px-6 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-slate-800"
+                    >
+                        Send Message
+                    </button>
+                </form>
+            </div>
+
+            <div class="grid sm:grid-cols-2 gap-6">
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <h3 class="font-semibold mb-2">GitHub Repository</h3>
+                    <p class="text-sm text-gray-600 mb-3">View the source code and technical implementation</p>
+                    <a href="https://github.com/nikodemkorbiel18-create/scale-5000" target="_blank" class="text-sm text-slate-900 font-medium hover:underline">
+                        View on GitHub →
+                    </a>
+                </div>
+
+                <div class="bg-white rounded-xl border border-gray-200 p-6">
+                    <h3 class="font-semibold mb-2">Response Time</h3>
+                    <p class="text-sm text-gray-600">
+                        I typically respond to inquiries within 24-48 hours during business days.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="border-t border-gray-200 bg-white mt-20">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 py-8">
+            <div class="flex flex-col sm:flex-row justify-between items-center gap-4 text-sm text-gray-600">
+                <div>&copy; 2025 ScaleAI Systems. Portfolio Project.</div>
+                <div class="flex gap-6">
+                    <a href="about.html" class="hover:text-black">About</a>
+                    <a href="contact.html" class="hover:text-black">Contact</a>
+                    <a href="privacy.html" class="hover:text-black">Privacy</a>
+                    <a href="terms.html" class="hover:text-black">Terms</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('contactForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+
+            const successDiv = document.getElementById('successMessage');
+            const errorDiv = document.getElementById('errorMessage');
+            const submitButton = document.getElementById('submitButton');
+
+            successDiv.classList.add('hidden');
+            errorDiv.classList.add('hidden');
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+
+            // Simulate form submission (in real implementation, this would send to an API)
+            setTimeout(() => {
+                successDiv.classList.remove('hidden');
+                submitButton.disabled = false;
+                submitButton.textContent = 'Send Message';
+                document.getElementById('contactForm').reset();
+
+                // Hide success message after 5 seconds
+                setTimeout(() => {
+                    successDiv.classList.add('hidden');
+                }, 5000);
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

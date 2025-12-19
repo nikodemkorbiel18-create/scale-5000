@@ -2,47 +2,33 @@ require('dotenv').config();
 const express = require('express');
 const session = require('express-session');
 const bcrypt = require('bcryptjs');
-const { sql } = require('@vercel/postgres');
+const Database = require('better-sqlite3');
 const OpenAI = require('openai');
 const path = require('path');
 
 const app = express();
+const db = new Database('scaleai.db');
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-// Initialize database tables (run once, or use separate migration script)
-async function initDatabase() {
-  try {
-    await sql`
-      CREATE TABLE IF NOT EXISTS users (
-        id SERIAL PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        password_hash TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `;
+// Initialize database
+db.exec(`
+  CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    email TEXT UNIQUE NOT NULL,
+    password_hash TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+  );
 
-    await sql`
-      CREATE TABLE IF NOT EXISTS ai_audits (
-        id SERIAL PRIMARY KEY,
-        user_id INTEGER NOT NULL REFERENCES users(id),
-        business_description TEXT NOT NULL,
-        current_revenue TEXT,
-        ai_response TEXT NOT NULL,
-        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-      );
-    `;
-
-    console.log('✅ Database tables initialized');
-  } catch (error) {
-    // Tables might already exist, that's okay
-    if (!error.message.includes('already exists')) {
-      console.error('Database initialization error:', error);
-    }
-  }
-}
-
-// Call on startup
-initDatabase();
+  CREATE TABLE IF NOT EXISTS ai_audits (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER NOT NULL,
+    business_description TEXT NOT NULL,
+    current_revenue TEXT,
+    ai_response TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+  );
+`);
 
 // Middleware
 app.use(express.json());
@@ -52,11 +38,7 @@ app.use(session({
   secret: process.env.SESSION_SECRET || 'fallback-secret-change-in-production',
   resave: false,
   saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', // HTTPS in production
-    httpOnly: true,
-    maxAge: 24 * 60 * 60 * 1000 // 24 hours
-  }
+  cookie: { secure: false } // Set to true with HTTPS in production
 }));
 
 // Auth middleware
@@ -77,21 +59,15 @@ app.post('/api/signup', async (req, res) => {
 
   try {
     const passwordHash = await bcrypt.hash(password, 10);
+    const stmt = db.prepare('INSERT INTO users (email, password_hash) VALUES (?, ?)');
+    const result = stmt.run(email, passwordHash);
 
-    const result = await sql`
-      INSERT INTO users (email, password_hash)
-      VALUES (${email}, ${passwordHash})
-      RETURNING id
-    `;
-
-    const userId = result.rows[0].id;
-    req.session.userId = userId;
-    res.json({ success: true, userId });
+    req.session.userId = result.lastInsertRowid;
+    res.json({ success: true, userId: result.lastInsertRowid });
   } catch (error) {
-    if (error.message.includes('duplicate key') || error.message.includes('unique constraint')) {
+    if (error.message.includes('UNIQUE constraint failed')) {
       return res.status(400).json({ error: 'Email already exists' });
     }
-    console.error('Signup error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -104,19 +80,14 @@ app.post('/api/login', async (req, res) => {
   }
 
   try {
-    const result = await sql`
-      SELECT id, email, password_hash
-      FROM users
-      WHERE email = ${email}
-    `;
+    const stmt = db.prepare('SELECT * FROM users WHERE email = ?');
+    const user = stmt.get(email);
 
-    if (result.rows.length === 0) {
+    if (!user) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
 
-    const user = result.rows[0];
     const valid = await bcrypt.compare(password, user.password_hash);
-
     if (!valid) {
       return res.status(401).json({ error: 'Invalid credentials' });
     }
@@ -124,7 +95,6 @@ app.post('/api/login', async (req, res) => {
     req.session.userId = user.id;
     res.json({ success: true, userId: user.id });
   } catch (error) {
-    console.error('Login error:', error);
     res.status(500).json({ error: 'Server error' });
   }
 });
@@ -134,27 +104,14 @@ app.post('/api/logout', (req, res) => {
   res.json({ success: true });
 });
 
-app.get('/api/me', async (req, res) => {
+app.get('/api/me', (req, res) => {
   if (!req.session.userId) {
     return res.status(401).json({ error: 'Not authenticated' });
   }
 
-  try {
-    const result = await sql`
-      SELECT id, email, created_at
-      FROM users
-      WHERE id = ${req.session.userId}
-    `;
-
-    if (result.rows.length === 0) {
-      return res.status(401).json({ error: 'User not found' });
-    }
-
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error('Get user error:', error);
-    res.status(500).json({ error: 'Server error' });
-  }
+  const stmt = db.prepare('SELECT id, email, created_at FROM users WHERE id = ?');
+  const user = stmt.get(req.session.userId);
+  res.json(user);
 });
 
 // AI Business Audit endpoint
@@ -182,16 +139,13 @@ app.post('/api/audit', requireAuth, async (req, res) => {
     const aiResponse = completion.choices[0].message.content;
 
     // Save to database
-    const result = await sql`
-      INSERT INTO ai_audits (user_id, business_description, current_revenue, ai_response)
-      VALUES (${req.session.userId}, ${businessDescription}, ${currentRevenue || null}, ${aiResponse})
-      RETURNING id
-    `;
+    const stmt = db.prepare('INSERT INTO ai_audits (user_id, business_description, current_revenue, ai_response) VALUES (?, ?, ?, ?)');
+    const result = stmt.run(req.session.userId, businessDescription, currentRevenue || null, aiResponse);
 
     res.json({
       success: true,
       audit: aiResponse,
-      auditId: result.rows[0].id
+      auditId: result.lastInsertRowid
     });
   } catch (error) {
     console.error('AI Audit error:', error);
@@ -200,20 +154,10 @@ app.post('/api/audit', requireAuth, async (req, res) => {
 });
 
 // Get user's audit history
-app.get('/api/audits', requireAuth, async (req, res) => {
-  try {
-    const result = await sql`
-      SELECT id, business_description, current_revenue, ai_response, created_at
-      FROM ai_audits
-      WHERE user_id = ${req.session.userId}
-      ORDER BY created_at DESC
-    `;
-
-    res.json(result.rows);
-  } catch (error) {
-    console.error('Get audits error:', error);
-    res.status(500).json({ error: 'Failed to fetch audits' });
-  }
+app.get('/api/audits', requireAuth, (req, res) => {
+  const stmt = db.prepare('SELECT id, business_description, current_revenue, ai_response, created_at FROM ai_audits WHERE user_id = ? ORDER BY created_at DESC');
+  const audits = stmt.all(req.session.userId);
+  res.json(audits);
 });
 
 // Publish audit to GitHub
@@ -229,15 +173,8 @@ app.post('/api/publish-audit', requireAuth, async (req, res) => {
     const fs = require('fs');
 
     // Get user info for the commit
-    const userResult = await sql`
-      SELECT email FROM users WHERE id = ${req.session.userId}
-    `;
-
-    if (userResult.rows.length === 0) {
-      return res.status(404).json({ error: 'User not found' });
-    }
-
-    const user = userResult.rows[0];
+    const userStmt = db.prepare('SELECT email FROM users WHERE id = ?');
+    const user = userStmt.get(req.session.userId);
 
     // Create audits directory if it doesn't exist
     if (!fs.existsSync('audits')) {
@@ -300,5 +237,4 @@ app.get('/dashboard.html', (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`ScaleAI MVP running on http://localhost:${PORT}`);
-  console.log(`Database: PostgreSQL (Vercel Postgres)`);
 });

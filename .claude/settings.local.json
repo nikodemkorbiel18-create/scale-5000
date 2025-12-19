@@ -13,7 +13,10 @@
       "Bash(vercel:*)",
       "Bash(npm init:*)",
       "Bash(npm install:*)",
-      "Bash(npm start)"
+      "Bash(npm start)",
+      "Bash(netstat:*)",
+      "Bash(findstr:*)",
+      "Bash(timeout 2 bash -c 'until curl -s http://localhost:3000 > /dev/null; do sleep 0.1; done')"
     ]
   }
 }
